@@ -157,14 +157,89 @@
   }
   #voz .cursor{ animation: pisca 1s steps(1) infinite; }
 
-  .gif-fake{
-    text-align:center; margin: 10px 0; font-size: 12px; color: var(--fg-dim);
+
+  /* ---- vela desenhada em CSS, reage ao --medo ---- */
+  .vela{
+    position: relative;
+    width: 46px;
+    height: 130px;
+    margin: 4px auto 14px;
+  }
+  .vela .corpo{
+    position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+    width: 34px; height: 92px;
+    background: linear-gradient(90deg,#b9a77e 0%, #efe4c4 45%, #fff8e6 55%, #c9b98d 100%);
+    border-radius: 4px 4px 3px 3px;
+  }
+  .vela .corpo::before{ /* poça de cera no topo */
+    content:""; position:absolute; top:-3px; left:0; right:0; height:7px;
+    background:#fff8e6; border-radius:50%;
+  }
+  .vela .pavio{
+    position:absolute; bottom:96px; left:50%; transform:translateX(-50%);
+    width:2px; height:8px; background:#2b2118; z-index:2;
+  }
+  .vela .chama{
+    position:absolute; bottom:104px; left:50%;
+    transform: translateX(-50%);
+    /* encolhe e fica espectral conforme o medo sobe */
+    filter: hue-rotate(calc(var(--medo) * 175deg)) saturate(calc(1 - var(--medo) * 0.4));
+    transition: filter .4s linear;
+  }
+  .vela .fogo{
+    width: 18px;
+    height: calc(34px - var(--medo) * 20px);
+    background: radial-gradient(circle at 50% 75%, #fff3b0 0%, #ffb52e 45%, #ff6a00 80%, rgba(255,80,0,0) 100%);
+    border-radius: 50% 50% 46% 46% / 62% 62% 40% 40%;
+    margin: 0 auto;
+    transform-origin: 50% 100%;
+    animation: chama 140ms ease-in-out infinite alternate;
+    box-shadow: 0 -2px 14px rgba(255,150,40,0.7);
+  }
+  .vela .brilho{
+    position:absolute; bottom:-6px; left:50%; transform:translate(-50%,0);
+    width: 90px; height: 90px;
+    background: radial-gradient(circle, rgba(255,170,60,0.35) 0%, rgba(255,150,40,0) 68%);
+    border-radius:50%;
+    animation: halo 2.2s ease-in-out infinite;
+    opacity: calc(1 - var(--medo) * 0.7);
+    pointer-events:none;
+  }
+  .vela .fumaca{
+    position:absolute; bottom:104px; left:50%; transform:translateX(-50%);
+    width:6px; height:40px;
+    background: linear-gradient(180deg, rgba(180,180,180,0) 0%, rgba(160,160,160,0.5) 60%, rgba(120,120,120,0) 100%);
+    border-radius:50%;
+    opacity:0; filter: blur(2px);
+  }
+  /* estado apagado: chama some, fumaça sobe */
+  .vela.apagada .chama, .vela.apagada .brilho{ opacity:0; transition:opacity .18s; }
+  .vela.apagada .fumaca{ animation: fumaca 2.4s ease-out forwards; }
+
+  @keyframes chama{
+    0%  { transform: scaleY(1)   scaleX(1)    skewX(0deg);   opacity:.95; }
+    100%{ transform: scaleY(1.12) scaleX(0.92) skewX(-3deg); opacity:1;   }
+  }
+  @keyframes halo{ 0%,100%{ transform:translate(-50%,0) scale(1); } 50%{ transform:translate(-50%,0) scale(1.12); } }
+  @keyframes fumaca{
+    0%  { opacity:0;   transform: translate(-50%,0)   scaleX(1); }
+    15% { opacity:.7; }
+    100%{ opacity:0;   transform: translate(-50%,-46px) scaleX(2.4); }
   }
 
   /* estado corrompido */
   .glitch{ animation: glitch 0.25s steps(2) infinite; }
 
   a.rodape{ color: var(--fg-dim); font-size:11px; text-decoration:none; }
+
+  .som{
+    position:fixed; top:12px; right:12px; z-index:9999;
+    width:34px; height:34px; padding:0;
+    background:transparent; color:var(--fg-dim); border:1px solid var(--fg-dim);
+    font-size:14px; line-height:1; cursor:pointer; text-transform:none; letter-spacing:0;
+  }
+  .som:hover{ color:var(--accent); box-shadow:0 0 10px var(--accent); background:transparent; }
+  .som.mudo{ opacity:.45; }
 
   @keyframes pisca{ 50%{ opacity:0; } }
   @keyframes tremor{
@@ -190,11 +265,18 @@
 </head>
 <body>
   <div class="tela">
+    <button id="som" class="som" aria-label="ligar ou desligar som" title="som">&#9834;</button>
     <h1 id="titulo">~ minha casa ~</h1>
     <p class="sub" id="sub">um cantinho meu na internet · desde 1998</p>
 
     <div class="caixa">
-      <div class="gif-fake">·:· [ vela acesa .gif ] ·:·</div>
+      <div class="vela" id="vela">
+        <div class="brilho"></div>
+        <div class="fumaca"></div>
+        <div class="chama"><div class="fogo"></div></div>
+        <div class="pavio"></div>
+        <div class="corpo"></div>
+      </div>
       <p id="boasvindas">
         oi! seja bem-vindo(a). faz muito tempo que ninguém aparece por aqui.
         fica à vontade, olha as coisas, assina o livrinho antes de ir. 🙂

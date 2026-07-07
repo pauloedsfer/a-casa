@@ -30,6 +30,8 @@
     livro: $("#livro"),
     nome: $("#nome"),
     assinar: $("#assinar"),
+    vela: $("#vela"),
+    som: $("#som"),
     body: document.body
   };
 
@@ -89,6 +91,109 @@
       }, Math.max(8, vel));
     });
   }
+
+  // ---- áudio: trilha sintetizada em tempo real (Web Audio) ----
+  const AUDIO = {
+    ctx: null, master: null, filtro: null, drone: [], ruido: null,
+    iniciado: false, mudo: false, medoAtual: 0, coracao: null,
+
+    // só pode nascer dentro de um gesto do usuário (o clique)
+    iniciar() {
+      if (this.iniciado || this.mudo) return;
+      try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        this.ctx = new AC();
+
+        this.master = this.ctx.createGain();
+        this.master.gain.value = 0.0001;
+        this.master.connect(this.ctx.destination);
+
+        this.filtro = this.ctx.createBiquadFilter();
+        this.filtro.type = "lowpass";
+        this.filtro.frequency.value = 220;
+        this.filtro.connect(this.master);
+
+        // drone grave: dois senoides com leve "beating" + um terceiro
+        // dissonante que só entra com o medo
+        [55, 55.4, 82.5].forEach((f, i) => {
+          const o = this.ctx.createOscillator();
+          o.type = i === 2 ? "triangle" : "sine";
+          o.frequency.value = f;
+          const g = this.ctx.createGain();
+          g.gain.value = i === 2 ? 0.0 : 0.5;
+          o.connect(g); g.connect(this.filtro); o.start();
+          this.drone.push({ o, g, base: f });
+        });
+
+        // sopro/vento: ruído branco filtrado
+        const buf = this.ctx.createBuffer(1, this.ctx.sampleRate * 2, this.ctx.sampleRate);
+        const dados = buf.getChannelData(0);
+        for (let i = 0; i < dados.length; i++) dados[i] = Math.random() * 2 - 1;
+        const fonte = this.ctx.createBufferSource();
+        fonte.buffer = buf; fonte.loop = true;
+        const bp = this.ctx.createBiquadFilter();
+        bp.type = "bandpass"; bp.frequency.value = 380; bp.Q.value = 0.7;
+        this.ruido = this.ctx.createGain(); this.ruido.gain.value = 0.0;
+        fonte.connect(bp); bp.connect(this.ruido); this.ruido.connect(this.master);
+        fonte.start();
+
+        this.iniciado = true;
+        this.master.gain.linearRampToValueAtTime(0.06, this.ctx.currentTime + 3);
+      } catch (e) { /* áudio é opcional; segue sem ele */ }
+    },
+
+    // reage ao nível de medo (0..1)
+    reagir(m) {
+      this.medoAtual = m;
+      if (!this.iniciado) return;
+      const t = this.ctx.currentTime, r = (n, v) => n.linearRampToValueAtTime(v, t + 0.5);
+      r(this.drone[2].g.gain, 0.05 + m * 0.14);          // dissonância entra
+      r(this.drone[1].o.frequency, 55.4 + m * 2.6);       // desafina = tensão
+      r(this.filtro.frequency, 220 + m * 950);            // fica mais "presente"
+      r(this.ruido.gain, m * 0.05);                       // vento sobe
+      r(this.master.gain, 0.05 + m * 0.07);
+      if (m > 0.5 && !this.coracao) this.baterCoracao();
+    },
+
+    baterCoracao() {
+      const passo = () => {
+        if (!this.iniciado || this.mudo) { this.coracao = null; return; }
+        this.batida(70, 0.10, 0.16);
+        setTimeout(() => this.batida(58, 0.09, 0.12), 165);
+        const bpm = 58 + this.medoAtual * 66;             // acelera com o medo
+        this.coracao = setTimeout(passo, 60000 / bpm);
+      };
+      passo();
+    },
+
+    batida(freq, dur, vol) {
+      if (!this.iniciado || this.mudo) return;
+      const t = this.ctx.currentTime;
+      const o = this.ctx.createOscillator(), g = this.ctx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(freq, t);
+      o.frequency.exponentialRampToValueAtTime(freq * 0.5, t + dur);
+      g.gain.setValueAtTime(vol, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(this.master); o.start(); o.stop(t + dur);
+    },
+
+    climax() {
+      if (!this.iniciado) return;
+      const t = this.ctx.currentTime;
+      this.batida(45, 1.4, 0.35);                          // baque grave
+      this.drone.forEach((d) => d.o.frequency.exponentialRampToValueAtTime(d.base * 0.5, t + 1.4));
+      this.master.gain.linearRampToValueAtTime(0.02, t + 2.2); // quase silêncio
+    },
+
+    alternar() {
+      this.mudo = !this.mudo;
+      if (this.mudo && this.master) this.master.gain.linearRampToValueAtTime(0.0001, this.ctx.currentTime + 0.3);
+      else if (this.master) this.reagir(this.medoAtual);
+      return this.mudo;
+    }
+  };
 
   // ---- aplica o nível de medo ao visual -----------------------
   function aplicarMedo() {
@@ -166,6 +271,8 @@
   function final() {
     if (S.finalizado) return;
     S.finalizado = true;
+    if (el.vela) el.vela.classList.add("apagada"); // a chama se apaga sozinha
+    AUDIO.climax();
     MEM.gravar("nome", (el.nome.value.trim() || nomeSalvo || "visitante"));
 
     filaVoz.then(async () => {
@@ -195,6 +302,8 @@
     S.fase = Math.min(roteiro.length, S.cliques);
     S.medo = S.cliques / roteiro.length;
     aplicarMedo();
+    AUDIO.iniciar();          // nasce no primeiro clique (gesto do usuário)
+    AUDIO.reagir(S.medo);
 
     // o contador oscila/decresce conforme o medo — "some gente"
     if (S.medo < 0.5) numeroContador = Math.max(1, numeroContador - 1);
@@ -249,6 +358,19 @@
       }
     }, 800);
 
+    // botão de som: liga o áudio (é um gesto válido) ou alterna mudo
+    el.som.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!AUDIO.iniciado && !AUDIO.mudo) {
+        AUDIO.iniciar();
+        AUDIO.reagir(Math.max(S.medo, 0.05));
+      } else {
+        const mudo = AUDIO.alternar();
+        el.som.classList.toggle("mudo", mudo);
+        el.som.innerHTML = mudo ? "&#128263;" : "&#9834;"; // 🔇 / ♪
+      }
+    });
+
     // qualquer clique alimenta a presença
     document.addEventListener("click", (e) => {
       // deixa o input de nome funcionar sem disparar
@@ -266,6 +388,17 @@
         el.nome.value = "";
       }
       aoClicar();
+    });
+
+    // trocar de aba não te esconde: o título chama de volta
+    const tituloOriginal = document.title;
+    const chamados = ["volte aqui", "não vá embora", "eu ainda estou aqui", "você esqueceu de mim"];
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && S.cliques >= 4 && !S.finalizado) {
+        document.title = chamados[Math.floor(Math.random() * chamados.length)];
+      } else if (!document.hidden) {
+        document.title = tituloOriginal;
+      }
     });
 
     // Escape não te salva
