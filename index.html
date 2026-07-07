@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>~ minha casa ~</title>
+<style>
+  :root{
+    /* medo = 0 (calmo) → 1 (terror). O JS interpola tudo a partir daqui. */
+    --medo: 0;
+    --fg: #33ff66;          /* fósforo verde CRT */
+    --fg-dim: #1f9a3d;
+    --bg: #050805;
+    --accent: #33ff66;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html,body{ height:100%; }
+
+  body{
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Courier New", "Lucida Console", monospace;
+    font-size: 16px;
+    line-height: 1.55;
+    overflow-x: hidden;
+    cursor: crosshair;
+    /* leve tremor que aumenta com o medo */
+    animation: tremor calc(0.9s - (var(--medo) * 0.75s)) infinite;
+    animation-play-state: paused;
+  }
+  body.assombrado{ animation-play-state: running; }
+
+  /* varredura de CRT (scanlines) sobre tudo */
+  body::before{
+    content:"";
+    position: fixed; inset:0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0) 0px,
+      rgba(0,0,0,0) 2px,
+      rgba(0,0,0,0.28) 3px,
+      rgba(0,0,0,0.28) 4px
+    );
+    pointer-events:none;
+    z-index: 9998;
+    opacity: calc(0.35 + var(--medo) * 0.4);
+  }
+  /* brilho/vinheta CRT + flicker */
+  body::after{
+    content:"";
+    position: fixed; inset:0;
+    background: radial-gradient(ellipse at center,
+      rgba(0,0,0,0) 55%,
+      rgba(0,0,0,0.75) 100%);
+    pointer-events:none;
+    z-index: 9997;
+    animation: flicker 4s infinite steps(1);
+  }
+
+  .tela{
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 48px 24px 120px;
+    position: relative;
+    z-index: 1;
+  }
+
+  h1{
+    font-size: 28px;
+    letter-spacing: 2px;
+    text-align:center;
+    margin-bottom: 6px;
+    text-shadow: 0 0 8px var(--accent);
+  }
+  .sub{
+    text-align:center;
+    color: var(--fg-dim);
+    margin-bottom: 40px;
+    font-size: 13px;
+  }
+
+  .caixa{
+    border: 1px solid var(--fg-dim);
+    padding: 20px;
+    margin-bottom: 28px;
+    background: rgba(0,20,0,0.15);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+  }
+  .caixa h2{
+    font-size: 15px;
+    border-bottom: 1px dashed var(--fg-dim);
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+    text-transform: lowercase;
+    letter-spacing: 1px;
+  }
+
+  /* contador de visitas retrô */
+  .contador{
+    text-align:center;
+    font-size: 13px;
+    color: var(--fg-dim);
+  }
+  .odometro{
+    display:inline-block;
+    background:#000;
+    color: var(--accent);
+    padding: 4px 10px;
+    letter-spacing: 6px;
+    border:1px solid var(--fg-dim);
+    margin: 8px 0;
+    font-size: 20px;
+    text-shadow: 0 0 6px var(--accent);
+  }
+
+  /* livro de visitas */
+  #livro .assinatura{
+    padding: 8px 0;
+    border-bottom: 1px dotted rgba(51,255,102,0.2);
+    font-size: 14px;
+  }
+  #livro .assinatura .nome{ color: var(--accent); }
+  #livro .assinatura .data{ float:right; color: var(--fg-dim); font-size: 11px; }
+
+  .campo{
+    display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;
+  }
+  .campo input{
+    flex:1; min-width:160px;
+    background:#000; border:1px solid var(--fg-dim);
+    color: var(--accent); padding:10px; font-family:inherit; font-size:14px;
+  }
+  .campo input:focus{ outline:none; box-shadow: 0 0 8px var(--accent); }
+
+  button{
+    background: var(--fg-dim);
+    color:#000; border:none; padding:10px 18px;
+    font-family:inherit; font-weight:bold; cursor:pointer;
+    letter-spacing:1px; text-transform: uppercase; font-size:13px;
+  }
+  button:hover{ background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+
+  /* a "voz" da casa — mensagens que aparecem */
+  #voz{
+    position: fixed;
+    left:0; right:0; bottom:0;
+    padding: 14px 20px;
+    background: rgba(0,0,0,0.85);
+    border-top: 1px solid var(--fg-dim);
+    font-size: 15px;
+    min-height: 52px;
+    z-index: 9996;
+    text-shadow: 0 0 6px currentColor;
+    backdrop-filter: blur(1px);
+  }
+  #voz .cursor{ animation: pisca 1s steps(1) infinite; }
+
+  .gif-fake{
+    text-align:center; margin: 10px 0; font-size: 12px; color: var(--fg-dim);
+  }
+
+  /* estado corrompido */
+  .glitch{ animation: glitch 0.25s steps(2) infinite; }
+
+  a.rodape{ color: var(--fg-dim); font-size:11px; text-decoration:none; }
+
+  @keyframes pisca{ 50%{ opacity:0; } }
+  @keyframes tremor{
+    0%,100%{ transform: translate(0,0); }
+    25%{ transform: translate(-1px, 1px); }
+    50%{ transform: translate(1px, -1px); }
+    75%{ transform: translate(-1px, -1px); }
+  }
+  @keyframes flicker{
+    0%,97%,100%{ opacity: 1; }
+    98%{ opacity: 0.82; }
+    99%{ opacity: 0.94; }
+  }
+  @keyframes glitch{
+    0%{ transform: translate(0); text-shadow: -2px 0 red, 2px 0 cyan; }
+    100%{ transform: translate(1px,-1px); text-shadow: 2px 0 red, -2px 0 cyan; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    body, #voz .cursor, .glitch{ animation: none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="tela">
+    <h1 id="titulo">~ minha casa ~</h1>
+    <p class="sub" id="sub">um cantinho meu na internet · desde 1998</p>
+
+    <div class="caixa">
+      <div class="gif-fake">·:· [ vela acesa .gif ] ·:·</div>
+      <p id="boasvindas">
+        oi! seja bem-vindo(a). faz muito tempo que ninguém aparece por aqui.
+        fica à vontade, olha as coisas, assina o livrinho antes de ir. 🙂
+      </p>
+    </div>
+
+    <div class="caixa contador">
+      você é o visitante número
+      <div class="odometro" id="odometro">000000</div>
+    </div>
+
+    <div class="caixa">
+      <h2>livro de visitas</h2>
+      <div id="livro"></div>
+      <div class="campo">
+        <input id="nome" type="text" placeholder="seu nome..." maxlength="24" autocomplete="off">
+        <button id="assinar">assinar</button>
+      </div>
+    </div>
+
+    <p style="text-align:center">
+      <a class="rodape" href="#" id="rodape">[ voltar ao topo ]</a>
+    </p>
+  </div>
+
+  <div id="voz"><span id="voz-texto"></span><span class="cursor">▊</span></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
