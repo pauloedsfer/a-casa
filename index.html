@@ -241,6 +241,20 @@
   .som:hover{ color:var(--accent); box-shadow:0 0 10px var(--accent); background:transparent; }
   .som.mudo{ opacity:.45; }
 
+  /* ---- oráculo ---- */
+  .oraculo[hidden]{ display:none; }
+  #dialogo{
+    max-height: 260px; overflow-y:auto;
+    margin-bottom: 6px; font-size:14px;
+  }
+  #dialogo .turno{ padding:6px 0; border-bottom:1px dotted rgba(255,255,255,0.08); }
+  #dialogo .eu{ color: var(--fg-dim); }
+  #dialogo .eu::before{ content:"> "; }
+  #dialogo .ele{ color: var(--accent); text-shadow:0 0 6px currentColor; }
+  #dialogo .pensando{ color: var(--fg-dim); }
+  #dialogo .pensando::after{ content:"▊"; animation: pisca 1s steps(1) infinite; }
+  #pergunta:disabled, #perguntar:disabled{ opacity:.4; cursor:not-allowed; }
+
   @keyframes pisca{ 50%{ opacity:0; } }
   @keyframes tremor{
     0%,100%{ transform: translate(0,0); }
@@ -294,6 +308,15 @@
       <div class="campo">
         <input id="nome" type="text" placeholder="seu nome..." maxlength="24" autocomplete="off">
         <button id="assinar">assinar</button>
+      </div>
+    </div>
+
+    <div class="caixa oraculo" id="oraculo" hidden>
+      <h2>o oráculo &middot; <span id="restantes">7</span> perguntas restantes</h2>
+      <div id="dialogo"></div>
+      <div class="campo">
+        <input id="pergunta" type="text" placeholder="pergunte..." maxlength="200" autocomplete="off">
+        <button id="perguntar">perguntar</button>
       </div>
     </div>
 

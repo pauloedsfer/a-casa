@@ -32,6 +32,11 @@
     assinar: $("#assinar"),
     vela: $("#vela"),
     som: $("#som"),
+    oraculo: $("#oraculo"),
+    dialogo: $("#dialogo"),
+    pergunta: $("#pergunta"),
+    perguntar: $("#perguntar"),
+    restantes: $("#restantes"),
     body: document.body
   };
 
@@ -290,9 +295,127 @@
         `oi de novo! seja bem-vindo(a), <b>${escapar(nome)}</b>. ` +
         `faz muito tempo que ninguém aparece por aqui. 🙂`;
       // ...mas com um detalhe errado
-      setTimeout(() => falar(`atualize a página quando quiser. eu vou lembrar de você, ${nome}.`, { pausaFinal: 3000 }), 1200);
+      setTimeout(() => {
+        falar(`atualize a página quando quiser. eu vou lembrar de você, ${nome}.`, { pausaFinal: 2500 });
+        setTimeout(() => ORACULO.abrir(), 3200);
+      }, 1200);
     });
   }
+
+  // ============================================================
+  //  ORÁCULO — sete perguntas. depois a porta fecha.
+  //  Tenta a serverless function /api/oraculo; se falhar,
+  //  cai no oráculo offline (respostas montadas localmente).
+  // ============================================================
+  const ORACULO = {
+    restantes: 7,
+    historico: [],
+    ocupado: false,
+    ativo: false,
+
+    abrir() {
+      if (this.ativo) return;
+      this.ativo = true;
+      el.oraculo.hidden = false;
+      el.restantes.textContent = this.restantes;
+      falar("eu concedo sete perguntas. pergunte o que quiser saber — mas eu também pergunto.", { vermelho: true });
+      setTimeout(() => el.pergunta.focus(), 400);
+    },
+
+    async perguntar(texto) {
+      texto = (texto || "").trim();
+      if (!texto || this.ocupado || this.restantes <= 0) return;
+      this.ocupado = true;
+      el.pergunta.value = "";
+      el.pergunta.disabled = true;
+      el.perguntar.disabled = true;
+
+      this.escrever("eu", texto);
+      this.historico.push({ role: "user", content: texto });
+      const pensando = this.escrever("ele pensando", "");
+
+      const resposta = await this.consultar(texto);
+
+      pensando.remove();
+      await this.escreverLento("ele", resposta);
+      this.historico.push({ role: "assistant", content: resposta });
+
+      this.restantes--;
+      el.restantes.textContent = this.restantes;
+
+      if (this.restantes <= 0) {
+        el.pergunta.remove();
+        el.perguntar.remove();
+        setTimeout(() => falar("a sétima já foi. a porta se fechou. você conhece o caminho — mas ele não leva pra fora.", { vermelho: true, pausaFinal: 4000 }), 800);
+      } else {
+        el.pergunta.disabled = false;
+        el.perguntar.disabled = false;
+        el.pergunta.focus();
+      }
+      this.ocupado = false;
+    },
+
+    // chama a serverless function; erro → oráculo offline
+    async consultar(texto) {
+      try {
+        const r = await fetch("/api/oraculo", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ pergunta: texto, historico: this.historico.slice(-12), restantes: this.restantes })
+        });
+        if (!r.ok) throw new Error("http " + r.status);
+        const d = await r.json();
+        if (d && d.resposta) return d.resposta;
+        throw new Error("vazio");
+      } catch (e) {
+        return this.offline(texto);
+      }
+    },
+
+    // oráculo offline: monta algo evocativo a partir das palavras
+    offline(texto) {
+      const t = texto.toLowerCase();
+      const tem = (...ps) => ps.some((p) => t.includes(p));
+      if (tem("morr", "morte", "mort")) return "a morte não é uma porta. é esta sala. você já está nela.";
+      if (tem("medo", "assust", "pavor")) return "você pergunta do medo como quem não o trouxe consigo. ele entrou junto com você.";
+      if (tem("sozinh", "só", "solid", "ninguém")) return "você nunca esteve só aqui. eu contei cada vez que você achou que estava.";
+      if (tem("noite", "escuro", "dorm", "sono")) return "quando você apagar a luz hoje, lembre que eu não preciso dela pra te ver.";
+      if (tem("casa", "sair", "porta", "fechar", "voltar")) return "a porta está bem ali. sempre esteve. experimente. eu espero.";
+      if (tem("nome", "quem é você", "quem e voce", "o que é você")) return "eu tive um nome quando esta casa tinha dono. agora eu uso o seu.";
+      if (tem("amor", "amo", "quero", "saudade", "perd")) return "o que você mais ama é o que você mais teme perder. eu já sei o nome dele.";
+      if (t.endsWith("?") || tem("por que", "porque", "como", "quando", "onde"))
+        return "você faz as perguntas erradas. a certa é: por que ainda não fechou esta aba?";
+      const ecos = [
+        "eu ouvi. eu guardo. eu devolvo quando você menos esperar.",
+        "curioso você dizer isso. o antigo morador disse quase igual, no fim.",
+        "cada palavra sua acende mais uma luz aqui dentro. logo dá pra ver tudo.",
+        "responda você: o que você não me contou ainda?"
+      ];
+      return ecos[Math.floor(Math.random() * ecos.length)];
+    },
+
+    escrever(tipo, texto) {
+      const div = document.createElement("div");
+      div.className = "turno " + (tipo === "eu" ? "eu" : "ele");
+      if (tipo === "ele pensando") { div.className = "turno pensando"; }
+      div.textContent = texto;
+      el.dialogo.appendChild(div);
+      el.dialogo.scrollTop = el.dialogo.scrollHeight;
+      return div;
+    },
+
+    escreverLento(tipo, texto) {
+      return new Promise((resolve) => {
+        const div = this.escrever(tipo, "");
+        let i = 0;
+        const t = setInterval(() => {
+          div.textContent += texto[i++];
+          el.dialogo.scrollTop = el.dialogo.scrollHeight;
+          if (i >= texto.length) { clearInterval(t); resolve(); }
+        }, 26);
+      });
+    }
+  };
 
   // ---- motor de clique ----------------------------------------
   function aoClicar() {
@@ -357,6 +480,16 @@
         falar("clique em qualquer lugar. quero te mostrar a casa.");
       }
     }, 800);
+
+    // oráculo: perguntar por botão ou Enter (sem disparar o clique global)
+    el.perguntar.addEventListener("click", (e) => {
+      e.stopPropagation();
+      ORACULO.perguntar(el.pergunta.value);
+    });
+    el.pergunta.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") { e.preventDefault(); ORACULO.perguntar(el.pergunta.value); }
+    });
+    el.pergunta.addEventListener("click", (e) => e.stopPropagation());
 
     // botão de som: liga o áudio (é um gesto válido) ou alterna mudo
     el.som.addEventListener("click", (e) => {
