@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sala de estar</title>
+<link rel="stylesheet" href="../css/casa.css">
+<style>
+  .parede{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin:22px 0 30px; }
+  .retrato{ width:92px; height:112px; border:3px solid var(--fg-dim); background:#0a0f0a; display:flex; align-items:center; justify-content:center; position:relative; }
+  .retrato .rosto{ width:46px; height:58px; border-radius:50% 50% 45% 45%; background:radial-gradient(circle at 50% 35%, rgba(51,255,102,.22), rgba(0,0,0,.6)); }
+  .retrato .legenda{ position:absolute; bottom:-19px; left:0; right:0; text-align:center; font-size:10px; color:var(--fg-dim); letter-spacing:1px; }
+  .retrato:not(.sem-rosto){ cursor:pointer; }
+  .retrato:not(.sem-rosto):hover{ border-color:var(--accent); }
+  .retrato.sem-rosto{ cursor:pointer; }
+  .retrato.sem-rosto .rosto{ background:repeating-linear-gradient(45deg,#141414 0 4px,#000 4px 8px); }
+  .retrato.sem-rosto:hover{ border-color:var(--accent); box-shadow:0 0 14px rgba(51,255,102,.3); }
+
+  .relogio{ width:104px; height:104px; border:3px solid var(--fg-dim); border-radius:50%; position:relative; margin:8px auto 4px; cursor:pointer; }
+  .relogio:hover{ border-color:var(--accent); }
+  .relogio::after{ content:""; position:absolute; width:7px; height:7px; background:var(--fg-dim); border-radius:50%; top:48px; left:48px; }
+  .ponteiro{ position:absolute; background:var(--fg-dim); transform-origin:bottom center; left:50%; bottom:50%; }
+  .ponteiro.hora{ width:3px; height:28px; transform:translateX(-50%) rotate(113deg); }
+  .ponteiro.min{ width:2px; height:40px; transform:translateX(-50%) rotate(282deg); }
+  .relogio .marca{ text-align:center; position:absolute; bottom:-22px; left:0; right:0; font-size:11px; color:var(--fg-dim); letter-spacing:1px; }
+
+  .selo-achado[hidden]{ display:none; }
+  .selo-achado{ text-align:center; margin:8px 0 4px; }
+  .selo-achado .glifo{ font-size:46px; color:var(--accent); text-shadow:0 0 16px var(--accent); }
+  .selo-achado .nota{ display:block; font-size:12px; color:var(--fg-dim); margin-top:4px; letter-spacing:1px; }
+</style>
+</head>
+<body>
+  <div class="tela">
+    <button id="som" class="som" aria-label="ligar ou desligar som" title="som">&#9834;</button>
+    <h1>sala de estar</h1>
+    <p class="sub">os móveis ainda estão cobertos. alguém saiu com pressa.</p>
+
+    <div class="caixa">
+      <p>a poeira é espessa, mas os retratos foram limpos há pouco. três rostos na parede — dois olham de volta. o do meio foi raspado até o gesso.</p>
+      <div class="parede">
+        <div class="retrato"><div class="rosto"></div><span class="legenda">fundador</span></div>
+        <div class="retrato sem-rosto" id="retrato-sem-rosto"><div class="rosto"></div><span class="legenda">?</span></div>
+        <div class="retrato"><div class="rosto"></div><span class="legenda">1998</span></div>
+      </div>
+    </div>
+
+    <div class="caixa" style="text-align:center">
+      <div class="relogio" id="relogio">
+        <div class="ponteiro hora"></div>
+        <div class="ponteiro min"></div>
+        <span class="marca">parado às 3h47</span>
+      </div>
+      <div class="selo-achado" id="selo" hidden>
+        <div class="glifo">✦</div>
+        <span class="nota">primeiro selo · o primeiro número é 3</span>
+      </div>
+    </div>
+
+    <div class="caixa">
+      <div class="selos" id="selos"></div>
+    </div>
+
+    <p class="nav"><a href="../index.html">&larr; voltar ao vestíbulo</a></p>
+  </div>
+
+  <div id="voz"><span id="voz-texto"></span><span class="cursor">▊</span></div>
+
+  <script src="../js/estado.js"></script>
+  <script src="../js/casa.js"></script>
+  <script src="../js/sala.js"></script>
+</body>
+</html>
