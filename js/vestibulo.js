@@ -43,7 +43,8 @@
     { id: "vestibulo", nome: "vestíbulo", estado: () => "aceso" },
     { id: "sala", nome: "sala de estar", url: "comodos/sala.html", dica: "após o oráculo",
       estado: () => Estado.flag("oraculo_completo") ? "aceso" : "trancado" },
-    { id: "quarto", nome: "quarto", dica: "assine o livro", estado: () => "breve" },
+    { id: "quarto", nome: "quarto", url: "comodos/quarto.html", dica: "assine o livro",
+      estado: () => Estado.flag("livro_assinado") ? "aceso" : "trancado" },
     { id: "cozinha", nome: "cozinha", dica: "pista da vela", estado: () => "breve" },
     { id: "corredor", nome: "corredor escuro", dica: "visite sala e quarto", estado: () => "breve" },
     { id: "porao", nome: "porão", dica: "reúna os quatro selos", estado: () => "breve" }
@@ -56,6 +57,7 @@
       const linkavel = st === "aceso" && c.url;
       const node = document.createElement(linkavel ? "a" : "div");
       node.className = "comodo " + st;
+      node.dataset.id = c.id;
       if (linkavel) node.href = c.url;
       let html = c.nome;
       if (st === "trancado") html += `<span class="cond">— trancado · ${c.dica}</span>`;
@@ -64,6 +66,14 @@
       node.innerHTML = html;
       el.planta.appendChild(node);
     });
+  }
+
+  function destacarComodo(id) {
+    const node = el.planta.querySelector(`[data-id="${id}"]`);
+    if (!node) return;
+    el.planta.scrollIntoView({ behavior: "smooth", block: "center" });
+    node.classList.add("novo");
+    setTimeout(() => node.classList.remove("novo"), 3200);
   }
 
   function renderizarSelos() {
@@ -135,14 +145,14 @@
   //  ORÁCULO — sete perguntas. depois, uma porta se abre.
   // ============================================================
   const ORACULO = {
-    restantes: 7, historico: [], ocupado: false, ativo: false,
+    restantes: 3, historico: [], ocupado: false, ativo: false,
 
     abrir() {
       if (this.ativo) return;
       this.ativo = true;
       el.oraculo.hidden = false;
       el.restantes.textContent = this.restantes;
-      falar("eu concedo sete perguntas. pergunte o que quiser saber — mas eu também pergunto.", { vermelho: true });
+      falar("eu concedo três perguntas. pergunte o que quiser saber — mas eu também pergunto.", { vermelho: true });
       setTimeout(() => el.pergunta.focus(), 400);
     },
 
@@ -183,7 +193,8 @@
     desbloquear() {
       Estado.flag("oraculo_completo", true);
       renderizarMapa();
-      falar("a sétima já foi. mas a casa é maior por dentro. a sala de estar acabou de destrancar — está no mapa.", { vermelho: true, pausaFinal: 4000 });
+      destacarComodo("sala");
+      falar("a terceira já foi. mas a casa é maior por dentro. a sala de estar destrancou — subi você até o mapa.", { vermelho: true, pausaFinal: 4000 });
     },
 
     async consultar(texto) {
@@ -317,6 +328,8 @@
         Estado.flag("livro_assinado", true);
         adicionarAssinatura(nome, S.medo > 0.5 ? "não devia ter deixado seu nome aqui." : "esteve aqui.", hora());
         el.nome.value = "";
+        renderizarMapa();
+        destacarComodo("quarto");
       }
       aoClicar();
     });

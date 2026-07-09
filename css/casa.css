@@ -101,6 +101,8 @@ a.rodape{ color: var(--fg-dim); font-size:11px; text-decoration:none; }
 .comodo{ display:block; width:100%; max-width:300px; padding:10px 14px; border:1px solid var(--fg-dim); color:var(--fg-dim); text-decoration:none; text-align:center; letter-spacing:1px; background:rgba(0,0,0,0.3); text-transform:lowercase; }
 .comodo.aceso{ color:var(--accent); border-color:var(--accent); box-shadow:0 0 10px rgba(51,255,102,0.25); cursor:pointer; }
 .comodo.aceso:hover{ background:rgba(51,255,102,0.08); }
+.comodo.novo{ animation: aceso-pisca 1s ease-in-out 3; }
+@keyframes aceso-pisca{ 0%,100%{ box-shadow:0 0 10px rgba(51,255,102,.25); } 50%{ box-shadow:0 0 24px rgba(51,255,102,.75); } }
 .comodo.trancado, .comodo.breve{ opacity:.4; cursor:default; }
 .comodo .cond{ display:block; font-size:11px; opacity:.75; margin-top:3px; letter-spacing:0; }
 

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>quarto</title>
+<link rel="stylesheet" href="../css/casa.css">
+<style>
+  #diario{ max-height:240px; overflow-y:auto; font-size:14px; line-height:1.65; margin-bottom:14px; }
+  #diario .entrada{ padding:10px 0; border-bottom:1px dotted rgba(51,255,102,.15); }
+  #diario .entrada.corrompida{ color:var(--fg-dim); opacity:.65; }
+  #virar[hidden]{ display:none; }
+
+  .selo-achado[hidden]{ display:none; }
+  .selo-achado{ text-align:center; margin:8px 0 4px; }
+  .selo-achado .glifo{ font-size:46px; color:var(--accent); text-shadow:0 0 16px var(--accent); }
+  .selo-achado .nota{ display:block; font-size:12px; color:var(--fg-dim); margin-top:4px; letter-spacing:1px; }
+</style>
+</head>
+<body>
+  <div class="tela">
+    <button id="som" class="som" aria-label="ligar ou desligar som" title="som">&#9834;</button>
+    <h1>quarto</h1>
+    <p class="sub">a cama está feita. faz tempo demais que ninguém dorme aqui.</p>
+
+    <div class="caixa">
+      <p>sobre a mesa, um diário aberto. a letra muda de página pra página — como se quem escrevia tivesse cada vez mais pressa.</p>
+    </div>
+
+    <div class="caixa">
+      <h2>diário — 1998</h2>
+      <div id="diario"></div>
+      <div style="text-align:center">
+        <button id="virar">virar a página</button>
+      </div>
+      <div class="selo-achado" id="selo" hidden>
+        <div class="glifo">✧</div>
+        <span class="nota">segundo selo · o segundo número é 4</span>
+      </div>
+    </div>
+
+    <div class="caixa">
+      <div class="selos" id="selos"></div>
+    </div>
+
+    <p class="nav"><a href="../index.html">&larr; voltar ao vestíbulo</a></p>
+  </div>
+
+  <div id="voz"><span id="voz-texto"></span><span class="cursor">▊</span></div>
+
+  <script src="../js/estado.js"></script>
+  <script src="../js/casa.js"></script>
+  <script src="../js/quarto.js"></script>
+</body>
+</html>
