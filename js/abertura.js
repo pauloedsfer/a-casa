@@ -38,11 +38,12 @@
     legenda.textContent = "";
     folha.classList.remove("treme");
     luz.style.opacity = "1";
-    Casa.audio.batida(58, 1.2, 0.42);     // baque grave: a porta cede
-    overlay.classList.add("abrindo");
-    setTimeout(() => {
+    Casa.audio.batida(58, 1.4, 0.42);        // baque grave: a porta cede
+    overlay.classList.add("abrindo");        // fase 1: a porta gira (1.7s, bem visível)
+    setTimeout(() => overlay.classList.add("saindo"), 1500);  // fase 2: só então a tela clareia
+    setTimeout(() => {                        // fase 3: some e entra na casa
       overlay.remove();
       window.dispatchEvent(new Event("casa:entrou"));
-    }, 1350);
+    }, 2600);
   }
 })();

@@ -181,16 +181,16 @@ body.porao::after{ background: radial-gradient(ellipse at center, rgba(0,0,0,0) 
 body.porao h1{ text-shadow:0 0 12px rgba(226,59,59,0.7); }
 
 /* ---- tela de abertura: bata para entrar ---- */
-#porta-overlay{ position:fixed; inset:0; z-index:99999; background:#050301; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; cursor:pointer; perspective:1100px; transition:opacity 1.3s ease; }
-#porta-overlay.abrindo{ opacity:0; pointer-events:none; }
-.porta-cena{ position:relative; width:210px; height:350px; }
-.porta-luz{ position:absolute; inset:-30px; background:radial-gradient(ellipse at center, rgba(255,210,140,0.9), rgba(255,180,90,0) 70%); opacity:0; transition:opacity .4s; }
-.porta-folha{ position:absolute; inset:0; background:linear-gradient(150deg,#3a2a1a,#180f07); border:6px solid #241811; border-radius:10px 10px 2px 2px; box-shadow: inset 0 0 0 6px rgba(0,0,0,0.35), inset 0 0 50px rgba(0,0,0,0.7); transform-origin:left center; transition:transform 1.2s ease-in; }
-#porta-overlay.abrindo .porta-folha{ transform:rotateY(-88deg); }
-.porta-folha::before, .porta-folha::after{ content:""; position:absolute; left:26px; right:26px; height:118px; border:3px solid rgba(0,0,0,0.45); border-radius:4px; }
+#porta-overlay{ position:fixed; inset:0; z-index:99999; background:#050301; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; cursor:pointer; perspective:1100px; transition:opacity 1s ease; }
+#porta-overlay.saindo{ opacity:0; pointer-events:none; }
+.porta-cena{ position:relative; width:210px; height:350px; transform-style:preserve-3d; }
+.porta-luz{ position:absolute; inset:-30px; background:radial-gradient(ellipse at center, rgba(255,210,140,0.9), rgba(255,180,90,0) 70%); opacity:0; transition:opacity .6s; }
+.porta-folha{ position:absolute; inset:0; background:linear-gradient(150deg,#3a2a1a,#180f07); border:6px solid #241811; border-radius:10px 10px 2px 2px; box-shadow: inset 0 0 0 6px rgba(0,0,0,0.35), inset 0 0 50px rgba(0,0,0,0.7); transform-origin:left center; transition:transform 1.7s cubic-bezier(.33,0,.15,1); backface-visibility:hidden; }
+#porta-overlay.abrindo .porta-folha{ transform:rotateY(-96deg); }
+.porta-folha::before, .porta-folha::after{ content:""; position:absolute; left:26px; right:40px; height:118px; border:3px solid rgba(0,0,0,0.45); border-radius:4px; }
 .porta-folha::before{ top:28px; }
 .porta-folha::after{ bottom:28px; }
-.aldrabao{ position:absolute; top:154px; left:50%; transform:translateX(-50%); width:36px; height:36px; border-radius:50%; background:radial-gradient(circle at 40% 35%, #c19a5e, #4a3418); border:3px solid #2a1d0e; box-shadow:0 2px 6px rgba(0,0,0,0.8); }
+.aldrabao{ position:absolute; top:50%; right:20px; transform:translateY(-50%); width:22px; height:22px; border-radius:50%; background:radial-gradient(circle at 38% 34%, #d8b06e, #5a4018); border:2px solid #2a1d0e; box-shadow:0 2px 5px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.3); }
 .porta-folha.treme{ animation:bate .26s; }
 .porta-legenda{ color:#d8c4a0; font-size:14px; letter-spacing:2px; text-shadow:0 0 8px rgba(216,196,160,0.5); animation:pisca 1.4s steps(1) infinite; text-align:center; padding:0 20px; }
 @keyframes bate{ 0%,100%{transform:translate(0,0)} 20%{transform:translate(-5px,2px)} 40%{transform:translate(5px,-2px)} 60%{transform:translate(-3px,1px)} 80%{transform:translate(3px,-1px)} }
