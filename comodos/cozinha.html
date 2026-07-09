@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>cozinha</title>
+<link rel="stylesheet" href="../css/casa.css?v=3">
+<style>
+  .fogao{ text-align:center; }
+  .panela{ position:relative; width:170px; height:78px; margin:22px auto 12px; cursor:pointer; }
+  .panela .corpo{ position:absolute; bottom:0; left:14px; right:14px; height:56px; background:linear-gradient(#3a342c,#171310); border-radius:0 0 18px 18px; border:2px solid #5c4326; }
+  .panela .corpo::before, .panela .corpo::after{ content:""; position:absolute; top:16px; width:14px; height:8px; border:2px solid #5c4326; border-radius:6px; }
+  .panela .corpo::before{ left:-14px; }
+  .panela .corpo::after{ right:-14px; }
+  .panela .caldo{ position:absolute; bottom:6px; left:26px; right:26px; height:40px; display:flex; align-items:center; justify-content:center; background:radial-gradient(ellipse at 50% 40%, #6b3a1f, #2a1206); border-radius:0 0 12px 12px; }
+  .panela .caldo .glifo{ font-size:34px; color:var(--accent); text-shadow:0 0 14px var(--accent); opacity:0; transition:opacity .6s .3s; }
+  .panela.aberta .caldo .glifo{ opacity:1; }
+  .panela .tampa{ position:absolute; top:0; left:8px; right:8px; height:30px; background:radial-gradient(circle at 50% 35%, #4a4038, #211a14); border-radius:50%; border:2px solid #5c4326; transition:transform .55s ease, opacity .55s; z-index:3; }
+  .panela .tampa::after{ content:""; position:absolute; top:-9px; left:50%; transform:translateX(-50%); width:16px; height:16px; border-radius:50%; background:#5c4326; }
+  .panela.aberta .tampa{ transform:translate(70px,-26px) rotate(28deg); opacity:.55; }
+
+  .enxame{ position:absolute; inset:0; pointer-events:none; z-index:4; }
+  .barata{ position:absolute; top:34px; left:50%; width:9px; height:5px; background:#2a1a0e; border-radius:50% 50% 45% 45%; box-shadow:0 0 2px #000; transition:transform .85s ease-out, opacity .85s; }
+  .barata::before{ content:""; position:absolute; top:-2px; left:2px; width:5px; height:3px; border-top:1px solid #1a0f06; border-radius:50%; }
+
+  .eletro{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:6px; }
+  .eletro .item{ border:2px solid #5c4326; background:rgba(20,10,4,0.5); padding:14px 16px; cursor:pointer; font-size:13px; letter-spacing:1px; color:var(--fg-dim); }
+  .eletro .item:hover{ color:var(--accent); border-color:var(--accent); }
+
+  .selo-achado[hidden]{ display:none; }
+  .selo-achado{ text-align:center; margin:10px 0 2px; }
+  .selo-achado .glifo{ font-size:44px; color:var(--accent); text-shadow:0 0 16px var(--accent); }
+  .selo-achado .nota{ display:block; font-size:12px; color:var(--fg-dim); margin-top:4px; letter-spacing:1px; }
+</style>
+</head>
+<body class="cozinha">
+  <div class="tela">
+    <button id="som" class="som" aria-label="ligar ou desligar som" title="som">&#9834;</button>
+    <h1>cozinha</h1>
+    <p class="sub">a pia transbordou faz tempo. algo aqui ainda tem fome.</p>
+    <div class="presenca"><span id="voz-texto"></span><span class="cursor">▊</span></div>
+
+    <div class="caixa">
+      <p>a louça está coberta de limo. moscas desenham círculos no ar parado. no fogão, uma panela tampada — e alguma coisa se mexeu embaixo da tampa quando você entrou.</p>
+    </div>
+
+    <div class="caixa fogao">
+      <h2>o fogão</h2>
+      <div class="panela" id="panela">
+        <div class="tampa"></div>
+        <div class="caldo"><span class="glifo">❖</span></div>
+        <div class="enxame" id="enxame"></div>
+      </div>
+      <p style="font-size:13px; color:var(--fg-dim)">clique na panela — se tiver coragem</p>
+      <div class="selo-achado" id="selo" hidden>
+        <div class="glifo">❖</div>
+        <span class="nota">terceiro selo · o terceiro número é 7</span>
+      </div>
+    </div>
+
+    <div class="caixa" style="text-align:center">
+      <h2>o resto</h2>
+      <div class="eletro">
+        <div class="item" id="geladeira">geladeira</div>
+        <div class="item" id="despensa">despensa</div>
+        <div class="item" id="pia">pia</div>
+      </div>
+    </div>
+
+    <div class="caixa">
+      <div class="selos" id="selos"></div>
+    </div>
+
+    <p class="nav"><a class="porta voltar aceso" href="../index.html">saguão</a></p>
+    <p class="assinado" style="text-align:center;font-size:12px;color:var(--fg-dim)">recknocking · the house</p>
+  </div>
+
+  <script src="../js/estado.js?v=3"></script>
+  <script src="../js/casa.js?v=3"></script>
+  <script src="../js/cozinha.js?v=3"></script>
+</body>
+</html>

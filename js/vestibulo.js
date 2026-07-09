@@ -45,7 +45,8 @@
       estado: () => Estado.flag("oraculo_completo") ? "aceso" : "trancado" },
     { id: "quarto", nome: "quarto", url: "comodos/quarto.html", dica: "assine o livro",
       estado: () => Estado.flag("livro_assinado") ? "aceso" : "trancado" },
-    { id: "cozinha", nome: "cozinha", dica: "pista da vela", estado: () => "breve" },
+    { id: "cozinha", nome: "cozinha", url: "comodos/cozinha.html", dica: "clique na vela",
+      estado: () => Estado.flag("vela_pista") ? "aceso" : "trancado" },
     { id: "corredor", nome: "corredor escuro", dica: "visite sala e quarto", estado: () => "breve" },
     { id: "porao", nome: "porão", dica: "reúna os quatro selos", estado: () => "breve" },
     { id: "varanda", nome: "varanda", url: "comodos/varanda.html", estado: () => "aceso" }
@@ -315,6 +316,26 @@
 
     Casa.configurarSom(el.som);
     Casa.configurarTituloAba(() => S.cliques >= 4 && !S.finalizado);
+
+    // a vela guarda a pista da cozinha (easter egg — clique nela)
+    let cliquesVela = 0;
+    el.vela.addEventListener("click", (e) => {
+      e.stopPropagation();
+      Casa.audio.iniciar();
+      if (Estado.flag("vela_pista")) {
+        falar("a vela já apontou o caminho. a cozinha te espera — se tiver estômago.", { vermelho: true });
+        return;
+      }
+      cliquesVela++;
+      if (cliquesVela === 1) falar("a vela chia quando você toca. cheiro de cera... e de algo mais doce, apodrecendo por baixo.");
+      else if (cliquesVela === 2) falar("a chama se inclina, teimosa, apontando pra dentro da casa. sempre pro mesmo lado.");
+      else {
+        Estado.flag("vela_pista", true);
+        renderizarMapa();
+        destacarComodo("cozinha");
+        falar("a chama estica na direção da cozinha. tem algo lá que ainda tem fome. a porta destrancou.", { vermelho: true });
+      }
+    });
 
     document.addEventListener("click", (e) => {
       if (e.target === el.nome) return;

@@ -140,6 +140,14 @@ body.varanda::after{ background: radial-gradient(ellipse at center, rgba(0,0,0,0
 body.varanda .presenca{ background:rgba(20,30,40,0.45); font-style:italic; }
 body.varanda h1{ text-shadow:0 0 10px rgba(167,200,224,0.5); }
 
+/* ---- cozinha: barata, chocolate, sangue, comida velha — legível ---- */
+body.cozinha{ --fg:#e8c9a0; --fg-dim:#a5794f; --bg:#180f07; --accent:#c9603a; --mofo:#7b8a3c; --medo:0.45; }
+body.cozinha::before{ opacity:.5; }
+body.cozinha::after{ background: radial-gradient(ellipse at center, rgba(0,0,0,0) 50%, rgba(10,4,0,0.8) 100%); }
+body.cozinha h1{ text-shadow:0 0 10px rgba(201,96,58,0.6); }
+body.cozinha .caixa{ background:rgba(30,16,6,0.4); border-color:#5c4326; }
+body.cozinha .caixa h2{ color:var(--mofo); border-bottom-color:#5c4326; }
+
 @keyframes pisca{ 50%{ opacity:0; } }
 @keyframes chama{ 0%{ transform: scaleY(1) scaleX(1) skewX(0deg); opacity:.95; } 100%{ transform: scaleY(1.12) scaleX(0.92) skewX(-3deg); opacity:1; } }
 @keyframes halo{ 0%,100%{ transform:translate(-50%,0) scale(1); } 50%{ transform:translate(-50%,0) scale(1.12); } }
