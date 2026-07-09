@@ -40,14 +40,15 @@
   //  MAPA DA CASA
   // ============================================================
   const COMODOS = [
-    { id: "vestibulo", nome: "vestíbulo", estado: () => "aceso" },
+    { id: "saguao", nome: "saguão", estado: () => "aceso" },
     { id: "sala", nome: "sala de estar", url: "comodos/sala.html", dica: "após o oráculo",
       estado: () => Estado.flag("oraculo_completo") ? "aceso" : "trancado" },
     { id: "quarto", nome: "quarto", url: "comodos/quarto.html", dica: "assine o livro",
       estado: () => Estado.flag("livro_assinado") ? "aceso" : "trancado" },
     { id: "cozinha", nome: "cozinha", dica: "pista da vela", estado: () => "breve" },
     { id: "corredor", nome: "corredor escuro", dica: "visite sala e quarto", estado: () => "breve" },
-    { id: "porao", nome: "porão", dica: "reúna os quatro selos", estado: () => "breve" }
+    { id: "porao", nome: "porão", dica: "reúna os quatro selos", estado: () => "breve" },
+    { id: "varanda", nome: "varanda", url: "comodos/varanda.html", estado: () => "aceso" }
   ];
 
   function renderizarMapa() {
@@ -56,13 +57,15 @@
       const st = c.estado();
       const linkavel = st === "aceso" && c.url;
       const node = document.createElement(linkavel ? "a" : "div");
-      node.className = "comodo " + st;
+      node.className = "porta " + st;
       node.dataset.id = c.id;
       if (linkavel) node.href = c.url;
-      let html = c.nome;
-      if (st === "trancado") html += `<span class="cond">— trancado · ${c.dica}</span>`;
-      else if (st === "breve") html += `<span class="cond">— ${c.dica} · em breve</span>`;
-      else if (c.id === "vestibulo") html += `<span class="cond">— você está aqui</span>`;
+      const trancada = st === "trancado" || st === "breve";
+      let html = (trancada ? '<span class="cadeado"></span>' : "") + c.nome;
+      if (st === "trancado") html += `<span class="cond">${c.dica}</span>`;
+      else if (st === "breve") html += `<span class="cond">${c.dica} · em breve</span>`;
+      else if (c.id === "saguao") html += `<span class="cond">você está aqui</span>`;
+      else if (c.id === "varanda") html += `<span class="cond">do lado de fora · sempre aberta</span>`;
       node.innerHTML = html;
       el.planta.appendChild(node);
     });
@@ -142,7 +145,7 @@
   }
 
   // ============================================================
-  //  ORÁCULO — sete perguntas. depois, uma porta se abre.
+  //  ORÁCULO — três perguntas. depois, uma porta se abre.
   // ============================================================
   const ORACULO = {
     restantes: 3, historico: [], ocupado: false, ativo: false,
@@ -297,13 +300,12 @@
     aplicarMedo();
 
     setTimeout(() => {
+      falar("BATA ANTES DE ENTRAR... OU SAIR");
       if (S.voltou) {
         el.body.classList.add("assombrado");
         S.medo = 0.2; aplicarMedo();
         const quem = Estado.nome ? `, ${Estado.nome}` : "";
         falar(`você voltou${quem}. eu sabia que voltaria. sempre voltam.`, { vermelho: true });
-      } else {
-        falar("clique em qualquer lugar. quero te mostrar a casa.");
       }
     }, 800);
 
@@ -316,7 +318,7 @@
 
     document.addEventListener("click", (e) => {
       if (e.target === el.nome) return;
-      if (e.target.closest(".comodo")) return;   // clicar num cômodo navega, não alimenta
+      if (e.target.closest(".porta")) return;   // clicar numa porta navega, não alimenta
       aoClicar();
     });
 

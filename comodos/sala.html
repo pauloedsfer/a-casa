@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>sala de estar</title>
-<link rel="stylesheet" href="../css/casa.css">
+<link rel="stylesheet" href="../css/casa.css?v=2">
 <style>
   .parede{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin:22px 0 30px; }
   .retrato{ width:92px; height:112px; border:3px solid var(--fg-dim); background:#0a0f0a; display:flex; align-items:center; justify-content:center; position:relative; }
@@ -35,6 +35,7 @@
     <button id="som" class="som" aria-label="ligar ou desligar som" title="som">&#9834;</button>
     <h1>sala de estar</h1>
     <p class="sub">os móveis ainda estão cobertos. alguém saiu com pressa.</p>
+    <div class="presenca"><span id="voz-texto"></span><span class="cursor">▊</span></div>
 
     <div class="caixa">
       <p>a poeira é espessa, mas os retratos foram limpos há pouco. três rostos na parede — dois olham de volta. o do meio foi raspado até o gesso.</p>
@@ -61,13 +62,11 @@
       <div class="selos" id="selos"></div>
     </div>
 
-    <p class="nav"><a href="../index.html">&larr; voltar ao vestíbulo</a></p>
+    <p class="nav"><a class="porta voltar aceso" href="../index.html">saguão</a></p>
   </div>
 
-  <div id="voz"><span id="voz-texto"></span><span class="cursor">▊</span></div>
-
-  <script src="../js/estado.js"></script>
-  <script src="../js/casa.js"></script>
-  <script src="../js/sala.js"></script>
+  <script src="../js/estado.js?v=2"></script>
+  <script src="../js/casa.js?v=2"></script>
+  <script src="../js/sala.js?v=2"></script>
 </body>
 </html>
