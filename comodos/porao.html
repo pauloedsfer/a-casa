@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>porão</title>
+<link rel="stylesheet" href="../css/casa.css?v=4">
+<style>
+  .fechadura{ text-align:center; }
+  .visor{ display:inline-flex; gap:10px; margin:10px 0 18px; }
+  .visor span{ width:44px; height:60px; border:2px solid var(--fg-dim); background:#000; color:var(--accent); font-size:34px; display:flex; align-items:center; justify-content:center; text-shadow:0 0 10px var(--accent); }
+  .visor.erro span{ border-color:var(--accent); animation: tremer .1s steps(2) 4; }
+  @keyframes tremer{ 0%{transform:translateX(-2px)} 100%{transform:translateX(2px)} }
+
+  .teclado{ display:grid; grid-template-columns:repeat(3, 60px); gap:10px; justify-content:center; }
+  .teclado button{ width:60px; height:52px; font-size:18px; background:rgba(40,10,10,0.5); color:var(--fg); border:2px solid var(--fg-dim); }
+  .teclado button:hover{ background:rgba(226,59,59,0.18); border-color:var(--accent); box-shadow:0 0 10px rgba(226,59,59,0.3); }
+  .teclado .largo{ grid-column:span 3; width:100%; text-transform:uppercase; letter-spacing:2px; }
+
+  #revelacao[hidden]{ display:none; }
+  #revelacao .bloco{ margin-bottom:14px; opacity:0; transition:opacity .8s; }
+  #revelacao .bloco.vem{ opacity:1; }
+
+  .gancho{ border:2px solid var(--accent); padding:18px; margin-top:20px; text-align:center; background:rgba(40,0,0,0.3); box-shadow:0 0 18px rgba(226,59,59,0.25); }
+  .gancho .titulo{ font-size:20px; letter-spacing:2px; color:var(--accent); text-shadow:0 0 10px var(--accent); margin-bottom:6px; }
+  .gancho .em-breve{ font-size:13px; color:var(--fg-dim); }
+  .gancho button{ margin-top:12px; background:transparent; color:var(--accent); border:1px solid var(--accent); }
+  .gancho button:hover{ background:rgba(226,59,59,0.15); box-shadow:0 0 12px rgba(226,59,59,0.4); }
+</style>
+</head>
+<body class="porao">
+  <div class="tela">
+    <button id="som" class="som" aria-label="ligar ou desligar som" title="som">&#9834;</button>
+    <h1>porão</h1>
+    <p class="sub">o ar aqui é mais velho. desce um degrau e já está mais frio.</p>
+    <div class="presenca"><span id="voz-texto"></span><span class="cursor">▊</span></div>
+
+    <div class="caixa" id="caixa-fechadura">
+      <p style="text-align:center">uma porta sem maçaneta. só a fechadura, e a lembrança de uma hora que a casa nunca esqueceu.</p>
+      <div class="fechadura">
+        <div class="visor" id="visor"><span>_</span><span>_</span><span>_</span></div>
+        <div class="teclado" id="teclado">
+          <button data-n="1">1</button><button data-n="2">2</button><button data-n="3">3</button>
+          <button data-n="4">4</button><button data-n="5">5</button><button data-n="6">6</button>
+          <button data-n="7">7</button><button data-n="8">8</button><button data-n="9">9</button>
+          <button data-n="0" class="largo">0</button>
+          <button id="limpar" class="largo">limpar</button>
+          <button id="destrancar" class="largo">destrancar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="revelacao" hidden></div>
+
+    <p class="nav"><a class="porta voltar aceso" href="../index.html">saguão</a></p>
+    <p class="assinado" style="text-align:center;font-size:12px;color:var(--fg-dim)">recknocking · the house</p>
+  </div>
+
+  <script src="../js/estado.js?v=4"></script>
+  <script src="../js/casa.js?v=4"></script>
+  <script src="../js/porao.js?v=4"></script>
+</body>
+</html>

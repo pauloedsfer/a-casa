@@ -47,8 +47,10 @@
       estado: () => Estado.flag("livro_assinado") ? "aceso" : "trancado" },
     { id: "cozinha", nome: "cozinha", url: "comodos/cozinha.html", dica: "clique na vela",
       estado: () => Estado.flag("vela_pista") ? "aceso" : "trancado" },
-    { id: "corredor", nome: "corredor escuro", dica: "visite sala e quarto", estado: () => "breve" },
-    { id: "porao", nome: "porão", dica: "reúna os quatro selos", estado: () => "breve" },
+    { id: "corredor", nome: "corredor escuro", url: "comodos/corredor.html", dica: "visite sala e quarto",
+      estado: () => (Estado.visitou("sala") && Estado.visitou("quarto")) ? "aceso" : "trancado" },
+    { id: "porao", nome: "porão", url: "comodos/porao.html", dica: "reúna os quatro selos",
+      estado: () => Estado.totalSelos() >= 4 ? "aceso" : "trancado" },
     { id: "varanda", nome: "varanda", url: "comodos/varanda.html", estado: () => "aceso" }
   ];
 

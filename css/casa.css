@@ -148,6 +148,17 @@ body.cozinha h1{ text-shadow:0 0 10px rgba(201,96,58,0.6); }
 body.cozinha .caixa{ background:rgba(30,16,6,0.4); border-color:#5c4326; }
 body.cozinha .caixa h2{ color:var(--mofo); border-bottom-color:#5c4326; }
 
+/* ---- corredor escuro: claustrofóbico, quase sem luz ---- */
+body.corredor{ --fg:#7fdf96; --fg-dim:#2f7a45; --bg:#020402; --accent:#4dff7a; --medo:0.6; }
+body.corredor::before{ opacity:.6; }
+body.corredor::after{ background: radial-gradient(ellipse at center, rgba(0,0,0,0) 34%, rgba(0,0,0,0.92) 100%); }
+
+/* ---- porão: o fundo da casa, cor de sangue ---- */
+body.porao{ --fg:#e7b6b6; --fg-dim:#8a4a4a; --bg:#0c0605; --accent:#e23b3b; --medo:0.8; }
+body.porao::before{ opacity:.55; }
+body.porao::after{ background: radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(20,0,0,0.9) 100%); }
+body.porao h1{ text-shadow:0 0 12px rgba(226,59,59,0.7); }
+
 @keyframes pisca{ 50%{ opacity:0; } }
 @keyframes chama{ 0%{ transform: scaleY(1) scaleX(1) skewX(0deg); opacity:.95; } 100%{ transform: scaleY(1.12) scaleX(0.92) skewX(-3deg); opacity:1; } }
 @keyframes halo{ 0%,100%{ transform:translate(-50%,0) scale(1); } 50%{ transform:translate(-50%,0) scale(1.12); } }

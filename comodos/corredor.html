@@ -3,40 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>quarto</title>
+<title>corredor escuro</title>
 <link rel="stylesheet" href="../css/casa.css?v=4">
 <style>
-  #diario{ max-height:240px; overflow-y:auto; font-size:14px; line-height:1.65; margin-bottom:14px; }
-  #diario .entrada{ padding:10px 0; border-bottom:1px dotted rgba(51,255,102,.15); }
-  #diario .entrada.corrompida{ color:var(--fg-dim); opacity:.65; }
-  #virar[hidden]{ display:none; }
+  #trilho{ font-size:14px; line-height:1.65; margin-bottom:14px; }
+  #trilho .passo{ padding:10px 0; border-bottom:1px dotted rgba(77,255,122,.15); }
+  #trilho .passo:last-child{ color:var(--accent); }
+  #seguir[hidden]{ display:none; }
 
   .selo-achado[hidden]{ display:none; }
-  .selo-achado{ text-align:center; margin:8px 0 4px; }
+  .selo-achado{ text-align:center; margin:10px 0 2px; }
   .selo-achado .glifo{ font-size:46px; color:var(--accent); text-shadow:0 0 16px var(--accent); }
   .selo-achado .nota{ display:block; font-size:12px; color:var(--fg-dim); margin-top:4px; letter-spacing:1px; }
 </style>
 </head>
-<body>
+<body class="corredor">
   <div class="tela">
     <button id="som" class="som" aria-label="ligar ou desligar som" title="som">&#9834;</button>
-    <h1>quarto</h1>
-    <p class="sub">a cama está feita. faz tempo demais que ninguém dorme aqui.</p>
+    <h1>corredor escuro</h1>
+    <p class="sub">nenhuma lâmpada funciona. só a luz por baixo das portas.</p>
     <div class="presenca"><span id="voz-texto"></span><span class="cursor">▊</span></div>
 
     <div class="caixa">
-      <p>sobre a mesa, um diário aberto. a letra muda de página pra página — como se quem escrevia tivesse cada vez mais pressa.</p>
-    </div>
-
-    <div class="caixa">
-      <h2>diário — 1998</h2>
-      <div id="diario"></div>
+      <div id="trilho"></div>
       <div style="text-align:center">
-        <button id="virar">virar a página</button>
+        <button id="seguir">seguir em frente</button>
       </div>
       <div class="selo-achado" id="selo" hidden>
-        <div class="glifo">✧</div>
-        <span class="nota">segundo selo · o segundo número é 4</span>
+        <div class="glifo">◈</div>
+        <span class="nota">quarto selo · a chave do porão</span>
       </div>
     </div>
 
@@ -45,10 +40,11 @@
     </div>
 
     <p class="nav"><a class="porta voltar aceso" href="../index.html">saguão</a></p>
+    <p class="assinado" style="text-align:center;font-size:12px;color:var(--fg-dim)">recknocking · the house</p>
   </div>
 
   <script src="../js/estado.js?v=4"></script>
   <script src="../js/casa.js?v=4"></script>
-  <script src="../js/quarto.js?v=4"></script>
+  <script src="../js/corredor.js?v=4"></script>
 </body>
 </html>
