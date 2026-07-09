@@ -124,6 +124,27 @@ a.rodape{ color: var(--fg-dim); font-size:11px; text-decoration:none; }
 .cadeado{ display:inline-block; position:relative; width:11px; height:9px; border:2px solid currentColor; border-radius:2px; margin-right:7px; vertical-align:-1px; }
 .cadeado::before{ content:""; position:absolute; left:1px; top:-6px; width:5px; height:6px; border:2px solid currentColor; border-bottom:none; border-radius:4px 4px 0 0; }
 
+/* ---- planta baixa (svg, casa vista de cima) ---- */
+.planta{ display:block; }
+.planta-svg{ width:100%; height:auto; display:block; font-family:"Courier New","Lucida Console",monospace; max-width:420px; margin:0 auto; }
+.parede-ext{ fill:none; stroke:var(--fg-dim); stroke-width:4; }
+.porta-frente{ fill:none; stroke:var(--fg-dim); stroke-width:2; }
+.cq{ fill:rgba(0,0,0,0.4); stroke:var(--fg-dim); stroke-width:1.5; transition:fill .3s, stroke-width .3s; }
+.comodo.aceso .cq{ fill:rgba(51,255,102,0.10); stroke:var(--accent); stroke-width:2; }
+.comodo.aceso{ cursor:pointer; }
+.comodo.aceso:hover .cq{ fill:rgba(51,255,102,0.22); }
+.comodo.porao.aceso .cq{ fill:rgba(226,59,59,0.16); stroke:#e23b3b; }
+.cq-nome{ font-size:12px; text-anchor:middle; fill:var(--fg-dim); letter-spacing:1px; }
+.comodo.aceso .cq-nome{ fill:var(--accent); }
+.comodo.porao.aceso .cq-nome{ fill:#e23b3b; }
+.cq-dica{ font-size:8.5px; text-anchor:middle; fill:var(--fg-dim); opacity:.8; }
+.mob{ fill:none; stroke:var(--fg-dim); stroke-width:1.4; opacity:.5; }
+.comodo.aceso .mob{ opacity:.65; }
+.cadeado-svg{ fill:none; stroke:var(--fg-dim); stroke-width:1.6; }
+.selo-svg{ fill:var(--accent); font-size:13px; text-anchor:middle; }
+.comodo.novo .cq{ animation: pulso-svg 1s ease-in-out 3; }
+@keyframes pulso-svg{ 0%,100%{ stroke-width:2; } 50%{ stroke-width:5; } }
+
 /* ---- selos ---- */
 .selos{ text-align:center; font-size:22px; letter-spacing:10px; }
 .selos .selo{ opacity:.2; }
@@ -158,6 +179,21 @@ body.porao{ --fg:#e7b6b6; --fg-dim:#8a4a4a; --bg:#0c0605; --accent:#e23b3b; --me
 body.porao::before{ opacity:.55; }
 body.porao::after{ background: radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(20,0,0,0.9) 100%); }
 body.porao h1{ text-shadow:0 0 12px rgba(226,59,59,0.7); }
+
+/* ---- tela de abertura: bata para entrar ---- */
+#porta-overlay{ position:fixed; inset:0; z-index:99999; background:#050301; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; cursor:pointer; perspective:1100px; transition:opacity 1.3s ease; }
+#porta-overlay.abrindo{ opacity:0; pointer-events:none; }
+.porta-cena{ position:relative; width:210px; height:350px; }
+.porta-luz{ position:absolute; inset:-30px; background:radial-gradient(ellipse at center, rgba(255,210,140,0.9), rgba(255,180,90,0) 70%); opacity:0; transition:opacity .4s; }
+.porta-folha{ position:absolute; inset:0; background:linear-gradient(150deg,#3a2a1a,#180f07); border:6px solid #241811; border-radius:10px 10px 2px 2px; box-shadow: inset 0 0 0 6px rgba(0,0,0,0.35), inset 0 0 50px rgba(0,0,0,0.7); transform-origin:left center; transition:transform 1.2s ease-in; }
+#porta-overlay.abrindo .porta-folha{ transform:rotateY(-88deg); }
+.porta-folha::before, .porta-folha::after{ content:""; position:absolute; left:26px; right:26px; height:118px; border:3px solid rgba(0,0,0,0.45); border-radius:4px; }
+.porta-folha::before{ top:28px; }
+.porta-folha::after{ bottom:28px; }
+.aldrabao{ position:absolute; top:154px; left:50%; transform:translateX(-50%); width:36px; height:36px; border-radius:50%; background:radial-gradient(circle at 40% 35%, #c19a5e, #4a3418); border:3px solid #2a1d0e; box-shadow:0 2px 6px rgba(0,0,0,0.8); }
+.porta-folha.treme{ animation:bate .26s; }
+.porta-legenda{ color:#d8c4a0; font-size:14px; letter-spacing:2px; text-shadow:0 0 8px rgba(216,196,160,0.5); animation:pisca 1.4s steps(1) infinite; text-align:center; padding:0 20px; }
+@keyframes bate{ 0%,100%{transform:translate(0,0)} 20%{transform:translate(-5px,2px)} 40%{transform:translate(5px,-2px)} 60%{transform:translate(-3px,1px)} 80%{transform:translate(3px,-1px)} }
 
 @keyframes pisca{ 50%{ opacity:0; } }
 @keyframes chama{ 0%{ transform: scaleY(1) scaleX(1) skewX(0deg); opacity:.95; } 100%{ transform: scaleY(1.12) scaleX(0.92) skewX(-3deg); opacity:1; } }

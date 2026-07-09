@@ -40,37 +40,79 @@
   //  MAPA DA CASA
   // ============================================================
   const COMODOS = [
-    { id: "saguao", nome: "saguão", estado: () => "aceso" },
-    { id: "sala", nome: "sala de estar", url: "comodos/sala.html", dica: "após o oráculo",
+    { id: "sala", nome: "sala", rect: { x: 24, y: 24, w: 150, h: 122 }, url: "comodos/sala.html", dica: "após o oráculo", selo: "✦",
       estado: () => Estado.flag("oraculo_completo") ? "aceso" : "trancado" },
-    { id: "quarto", nome: "quarto", url: "comodos/quarto.html", dica: "assine o livro",
+    { id: "quarto", nome: "quarto", rect: { x: 186, y: 24, w: 150, h: 122 }, url: "comodos/quarto.html", dica: "assine o livro", selo: "✧",
       estado: () => Estado.flag("livro_assinado") ? "aceso" : "trancado" },
-    { id: "cozinha", nome: "cozinha", url: "comodos/cozinha.html", dica: "clique na vela",
-      estado: () => Estado.flag("vela_pista") ? "aceso" : "trancado" },
-    { id: "corredor", nome: "corredor escuro", url: "comodos/corredor.html", dica: "visite sala e quarto",
+    { id: "corredor", nome: "corredor", rect: { x: 24, y: 156, w: 312, h: 48 }, url: "comodos/corredor.html", dica: "visite sala e quarto", selo: "◈",
       estado: () => (Estado.visitou("sala") && Estado.visitou("quarto")) ? "aceso" : "trancado" },
-    { id: "porao", nome: "porão", url: "comodos/porao.html", dica: "reúna os quatro selos",
+    { id: "cozinha", nome: "cozinha", rect: { x: 24, y: 214, w: 150, h: 80 }, url: "comodos/cozinha.html", dica: "clique na vela", selo: "❖",
+      estado: () => Estado.flag("vela_pista") ? "aceso" : "trancado" },
+    { id: "porao", nome: "porão", rect: { x: 186, y: 214, w: 150, h: 80 }, url: "comodos/porao.html", dica: "reúna os 4 selos",
       estado: () => Estado.totalSelos() >= 4 ? "aceso" : "trancado" },
-    { id: "varanda", nome: "varanda", url: "comodos/varanda.html", estado: () => "aceso" }
+    { id: "saguao", nome: "saguão", rect: { x: 105, y: 302, w: 150, h: 54 }, hub: true, estado: () => "aceso" },
+    { id: "varanda", nome: "varanda", rect: { x: 70, y: 374, w: 220, h: 44 }, url: "comodos/varanda.html", fora: true, estado: () => "aceso" }
   ];
 
+  // móveis simples desenhados de cima, por cômodo (só aparecem nos acesos)
+  function mobiliaSVG(id) {
+    switch (id) {
+      case "sala": return '<rect class="mob" x="44" y="110" width="110" height="24" rx="4"/><rect class="mob" x="44" y="104" width="110" height="8"/><rect class="mob" x="82" y="62" width="36" height="20" rx="2"/>';
+      case "quarto": return '<rect class="mob" x="206" y="52" width="110" height="74" rx="4"/><rect class="mob" x="206" y="52" width="110" height="18"/>';
+      case "cozinha": return '<rect class="mob" x="36" y="238" width="30" height="30"/><circle class="mob" cx="43" cy="245" r="3"/><circle class="mob" cx="59" cy="245" r="3"/><circle class="mob" cx="43" cy="261" r="3"/><circle class="mob" cx="59" cy="261" r="3"/><rect class="mob" x="80" y="238" width="82" height="14" rx="2"/>';
+      case "porao": return '<line class="mob" x1="202" y1="238" x2="322" y2="238"/><line class="mob" x1="208" y1="248" x2="322" y2="248"/><line class="mob" x1="214" y1="258" x2="322" y2="258"/><line class="mob" x1="220" y1="268" x2="322" y2="268"/><line class="mob" x1="226" y1="278" x2="322" y2="278"/>';
+      case "corredor": return '<rect class="mob" x="44" y="178" width="272" height="12" rx="2"/>';
+      case "saguao": return '<rect class="mob" x="150" y="330" width="60" height="16" rx="2"/>';
+      case "varanda": return '<line class="mob" x1="98" y1="398" x2="98" y2="414"/><line class="mob" x1="138" y1="398" x2="138" y2="414"/><line class="mob" x1="178" y1="398" x2="178" y2="414"/><line class="mob" x1="218" y1="398" x2="218" y2="414"/><line class="mob" x1="258" y1="398" x2="258" y2="414"/>';
+      default: return "";
+    }
+  }
+
+  function cadeadoSVG(cx, cy) {
+    return `<g class="cadeado-svg" transform="translate(${cx - 7},${cy - 5})"><rect x="0" y="6" width="14" height="11" rx="2"/><path d="M3 6 V4 a4 4 0 0 1 8 0 V6"/></g>`;
+  }
+
+  function comodoSVG(c, st) {
+    const r = c.rect, cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+    const trancado = st !== "aceso";
+    let cls = "comodo " + st;
+    if (c.id === "porao") cls += " porao";
+    let inner = `<rect class="cq" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="3"/>`;
+    if (!trancado) {
+      inner += mobiliaSVG(c.id);
+      if (c.selo && Estado.temSelo(c.id)) inner += `<text class="selo-svg" x="${r.x + r.w - 14}" y="${r.y + 18}">${c.selo}</text>`;
+    } else {
+      inner += cadeadoSVG(cx, cy);
+    }
+    inner += `<text class="cq-nome" x="${cx}" y="${r.y + 16}">${c.nome}</text>`;
+    let dica = trancado ? c.dica : (c.hub ? "você está aqui" : (c.fora ? "do lado de fora" : ""));
+    if (dica) inner += `<text class="cq-dica" x="${cx}" y="${r.y + r.h - 7}">${dica}</text>`;
+    return `<g class="${cls}" data-id="${c.id}">${inner}</g>`;
+  }
+
+  function molduraSVG() {
+    return '<rect class="parede-ext" x="16" y="16" width="328" height="348" rx="6"/>'
+      + '<rect x="158" y="360" width="44" height="8" fill="var(--bg)"/>'
+      + '<line class="porta-frente" x1="158" y1="360" x2="158" y2="372"/>'
+      + '<line class="porta-frente" x1="202" y1="360" x2="202" y2="372"/>'
+      + '<path class="porta-frente" d="M158 372 Q180 380 202 372"/>';
+  }
+
   function renderizarMapa() {
-    el.planta.innerHTML = "";
+    const p = ['<svg viewBox="0 0 360 430" class="planta-svg" role="img" aria-label="planta da casa vista de cima">'];
+    p.push(molduraSVG());
+    COMODOS.forEach((c) => p.push(comodoSVG(c, c.estado())));
+    p.push("</svg>");
+    el.planta.innerHTML = p.join("");
     COMODOS.forEach((c) => {
+      const g = el.planta.querySelector(`[data-id="${c.id}"]`);
+      if (!g) return;
       const st = c.estado();
-      const linkavel = st === "aceso" && c.url;
-      const node = document.createElement(linkavel ? "a" : "div");
-      node.className = "porta " + st;
-      node.dataset.id = c.id;
-      if (linkavel) node.href = c.url;
-      const trancada = st === "trancado" || st === "breve";
-      let html = (trancada ? '<span class="cadeado"></span>' : "") + c.nome;
-      if (st === "trancado") html += `<span class="cond">${c.dica}</span>`;
-      else if (st === "breve") html += `<span class="cond">${c.dica} · em breve</span>`;
-      else if (c.id === "saguao") html += `<span class="cond">você está aqui</span>`;
-      else if (c.id === "varanda") html += `<span class="cond">do lado de fora · sempre aberta</span>`;
-      node.innerHTML = html;
-      el.planta.appendChild(node);
+      g.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (st === "aceso" && c.url) window.location.href = c.url;
+        else if (st !== "aceso" && c.dica) falar(`${c.nome}: ${c.dica}.`);
+      });
     });
   }
 
@@ -302,15 +344,21 @@
     renderizarSelos();
     aplicarMedo();
 
-    setTimeout(() => {
-      falar("BATA ANTES DE ENTRAR... OU SAIR");
+    function comecar() {
       if (S.voltou) {
         el.body.classList.add("assombrado");
         S.medo = 0.2; aplicarMedo();
         const quem = Estado.nome ? `, ${Estado.nome}` : "";
-        falar(`você voltou${quem}. eu sabia que voltaria. sempre voltam.`, { vermelho: true });
+        falar(`você voltou${quem}. eu sabia que ia bater de novo. sempre batem.`, { vermelho: true });
+      } else {
+        falar("você bateu. a porta cedeu. agora você está do lado de dentro — como todos ficam.");
       }
-    }, 800);
+    }
+    if (document.getElementById("porta-overlay")) {
+      window.addEventListener("casa:entrou", () => setTimeout(comecar, 500), { once: true });
+    } else {
+      setTimeout(comecar, 800);
+    }
 
     el.perguntar.addEventListener("click", (e) => { e.stopPropagation(); ORACULO.perguntar(el.pergunta.value); });
     el.pergunta.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); ORACULO.perguntar(el.pergunta.value); } });
@@ -341,7 +389,7 @@
 
     document.addEventListener("click", (e) => {
       if (e.target === el.nome) return;
-      if (e.target.closest(".porta")) return;   // clicar numa porta navega, não alimenta
+      if (e.target.closest("#planta")) return;   // clicar na planta navega, não alimenta
       aoClicar();
     });
 

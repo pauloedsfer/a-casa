@@ -4,9 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recknocking — The House</title>
-<link rel="stylesheet" href="css/casa.css?v=4">
+<link rel="stylesheet" href="css/casa.css?v=6">
 </head>
 <body>
+  <div id="porta-overlay">
+    <div class="porta-cena">
+      <div class="porta-luz" id="porta-luz"></div>
+      <div class="porta-folha" id="porta-folha">
+        <div class="aldrabao" id="aldrabao"></div>
+      </div>
+    </div>
+    <p class="porta-legenda" id="porta-legenda">BATA ANTES DE ENTRAR... OU SAIR</p>
+  </div>
+
   <div class="tela">
     <button id="som" class="som" aria-label="ligar ou desligar som" title="som">&#9834;</button>
     <h1 id="titulo">++ A CASA ++</h1>
@@ -25,6 +35,15 @@
         oi! seja bem-vindo(a). faz muito tempo que ninguém aparece por aqui.
         fica à vontade, olha as coisas, assina o livrinho antes de ir. 🙂
       </p>
+    </div>
+
+    <div class="caixa oraculo" id="oraculo" hidden>
+      <h2>o oráculo &middot; <span id="restantes">3</span> perguntas restantes</h2>
+      <div id="dialogo"></div>
+      <div class="campo">
+        <input id="pergunta" type="text" placeholder="pergunte..." maxlength="200" autocomplete="off">
+        <button id="perguntar">perguntar</button>
+      </div>
     </div>
 
     <div class="caixa">
@@ -47,22 +66,14 @@
       </div>
     </div>
 
-    <div class="caixa oraculo" id="oraculo" hidden>
-      <h2>o oráculo &middot; <span id="restantes">3</span> perguntas restantes</h2>
-      <div id="dialogo"></div>
-      <div class="campo">
-        <input id="pergunta" type="text" placeholder="pergunte..." maxlength="200" autocomplete="off">
-        <button id="perguntar">perguntar</button>
-      </div>
-    </div>
-
     <p style="text-align:center; margin-top:20px">
       <span class="rodape">recknocking · the house · disquete recuperado em 2015</span>
     </p>
   </div>
 
-  <script src="js/estado.js?v=4"></script>
-  <script src="js/casa.js?v=4"></script>
-  <script src="js/vestibulo.js?v=4"></script>
+  <script src="js/estado.js?v=6"></script>
+  <script src="js/casa.js?v=6"></script>
+  <script src="js/abertura.js?v=6"></script>
+  <script src="js/vestibulo.js?v=6"></script>
 </body>
 </html>
