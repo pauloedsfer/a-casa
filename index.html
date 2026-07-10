@@ -4,7 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recknocking — The House</title>
-<link rel="stylesheet" href="css/casa.css?v=7">
+<meta name="description" content="Uma casa que existe desde 1998 e nunca esquece quem entra. Bata antes de entrar... ou sair.">
+<meta name="theme-color" content="#050805">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Recknocking — The House">
+<meta property="og:description" content="Uma casa que existe desde 1998 e nunca esquece quem entra. Bata antes de entrar... ou sair.">
+<meta property="og:locale" content="pt_BR">
+<!-- para preview com imagem no WhatsApp/redes, hospede um print da porta como /og.png e descomente:
+<meta property="og:image" content="https://SEU-DOMINIO.vercel.app/og.png"> -->
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="css/casa.css?v=8">
 </head>
 <body>
   <div id="porta-overlay">
@@ -38,11 +47,10 @@
     </div>
 
     <div class="caixa oraculo" id="oraculo" hidden>
-      <h2>o oráculo &middot; <span id="restantes">3</span> perguntas restantes</h2>
+      <h2>a bússola</h2>
       <div id="dialogo"></div>
-      <div class="campo">
-        <input id="pergunta" type="text" placeholder="pergunte..." maxlength="200" autocomplete="off">
-        <button id="perguntar">perguntar</button>
+      <div style="text-align:center; margin-top:12px">
+        <button id="perguntar">peça um sinal à presença</button>
       </div>
     </div>
 
@@ -67,13 +75,14 @@
     </div>
 
     <p style="text-align:center; margin-top:20px">
-      <span class="rodape">recknocking · the house · disquete recuperado em 2015</span>
+      <span class="rodape">recknocking · the house · disquete recuperado em 2015</span><br>
+      <button id="recomecar" class="link-reset">recomeçar do zero</button>
     </p>
   </div>
 
-  <script src="js/estado.js?v=7"></script>
-  <script src="js/casa.js?v=7"></script>
-  <script src="js/abertura.js?v=7"></script>
-  <script src="js/vestibulo.js?v=7"></script>
+  <script src="js/estado.js?v=8"></script>
+  <script src="js/casa.js?v=8"></script>
+  <script src="js/abertura.js?v=8"></script>
+  <script src="js/vestibulo.js?v=8"></script>
 </body>
 </html>

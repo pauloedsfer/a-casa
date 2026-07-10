@@ -82,6 +82,9 @@ button:hover{ background: var(--accent); box-shadow: 0 0 12px var(--accent); }
 
 a.rodape{ color: var(--fg-dim); font-size:11px; text-decoration:none; }
 
+.link-reset{ background:transparent; color:var(--fg-dim); border:none; padding:6px; margin-top:6px; font-family:inherit; font-size:11px; letter-spacing:1px; text-transform:none; cursor:pointer; opacity:.6; text-decoration:underline; }
+.link-reset:hover{ color:var(--accent); opacity:1; background:transparent; box-shadow:none; }
+
 .som{ position:fixed; top:12px; right:12px; z-index:9999; width:34px; height:34px; padding:0; background:transparent; color:var(--fg-dim); border:1px solid var(--fg-dim); font-size:14px; line-height:1; cursor:pointer; text-transform:none; letter-spacing:0; }
 .som:hover{ color:var(--accent); box-shadow:0 0 10px var(--accent); background:transparent; }
 .som.mudo{ opacity:.45; }

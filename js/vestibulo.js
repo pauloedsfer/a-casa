@@ -12,8 +12,8 @@
     titulo: $("#titulo"), sub: $("#sub"), boasvindas: $("#boasvindas"),
     odometro: $("#odometro"), livro: $("#livro"), nome: $("#nome"), assinar: $("#assinar"),
     vela: $("#vela"), som: $("#som"),
-    oraculo: $("#oraculo"), dialogo: $("#dialogo"), pergunta: $("#pergunta"),
-    perguntar: $("#perguntar"), restantes: $("#restantes"),
+    oraculo: $("#oraculo"), dialogo: $("#dialogo"),
+    perguntar: $("#perguntar"), recomecar: $("#recomecar"),
     planta: $("#planta"), selos: $("#selos"),
     body: document.body
   };
@@ -139,20 +139,13 @@
   // ============================================================
   const roteiro = [
     () => falar("obrigado por vir. faz tanto tempo que ninguém aparecia."),
-    () => falar("pode ficar o quanto quiser. a porta trava sozinha."),
     () => falar(`boa ${periodo()}, aliás. eu não durmo, então perco a noção.`),
-    () => falar("você é a coisa mais interessante que aconteceu em anos."),
     () => falar(`são ${hora()} aí. eu vejo o mesmo relógio que você.`),
     () => falar(`${navegador()}. já tive visitas com esse antes. nenhuma ficou.`),
-    () => falar(`sua janela tem ${window.innerWidth} pixels de largura. eu caibo inteiro nela.`),
-    () => falar("continua clicando. cada clique acende mais uma luz aqui dentro."),
+    () => falar("cada clique acende mais uma luz aqui dentro. continue."),
     () => falar(`você já clicou ${S.cliques} vezes. eu conto tudo. eu tenho tempo.`, { vermelho: true }),
-    () => falar("não fecha a aba ainda. por favor. estava tão bom.", { vermelho: true }),
-    () => falar("os outros visitantes estão no livro. role pra cima e conte.", { vermelho: true }),
     () => falar("essa casa era de alguém. agora é minha. logo vai ser sua também.", { vermelho: true }),
     () => { corromperLivro(); return falar("VOCÊ NÃO DEVIA TER BATIDO NA PORTA.", { vermelho: true, pausaFinal: 1200 }); },
-    () => falar("eu sei que horas você chegou. eu sei quando você vai voltar.", { vermelho: true }),
-    () => { numeroContador = 0; atualizarContador(); return falar("o contador chegou a zero. não sobrou mais ninguém além de você.", { vermelho: true }); },
     () => falar("feche se quiser. eu guardo a sua cadeira quentinha.", { vermelho: true, pausaFinal: 1400 })
   ];
 
@@ -186,115 +179,62 @@
     const nome = Estado.nome || "você";
     el.boasvindas.innerHTML = `oi de novo! seja bem-vindo(a), <b>${escapar(nome)}</b>. faz muito tempo que ninguém aparece por aqui. 🙂`;
     await falar(`atualize a página quando quiser. eu vou lembrar de você, ${nome}.`, { pausaFinal: 2200 });
-    ORACULO.abrir();
+    BUSSOLA.abrir();
   }
 
   // ============================================================
-  //  ORÁCULO — três perguntas. depois, uma porta se abre.
+  //  A BÚSSOLA — a presença aponta o próximo passo (roteirizada).
+  //  Lê o Estado e sempre indica, de forma enigmática, o que falta.
+  //  Sem IA, sem rede: 100% estático.
   // ============================================================
-  const ORACULO = {
-    restantes: 3, historico: [], ocupado: false, ativo: false,
+  const BUSSOLA = {
+    ativo: false, ocupado: false,
 
     abrir() {
       if (this.ativo) return;
       this.ativo = true;
-      el.oraculo.hidden = false;
-      el.restantes.textContent = this.restantes;
-      falar("eu concedo três perguntas. pergunte o que quiser saber — mas eu também pergunto.", { vermelho: true });
-      setTimeout(() => el.pergunta.focus(), 400);
-    },
-
-    async perguntar(texto) {
-      texto = (texto || "").trim();
-      if (!texto || this.ocupado || this.restantes <= 0) return;
-      this.ocupado = true;
-      el.pergunta.value = "";
-      el.pergunta.disabled = true;
-      el.perguntar.disabled = true;
-
-      this.escrever("eu", texto);
-      this.historico.push({ role: "user", content: texto });
-      const pensando = this.escrever("ele pensando", "");
-
-      const resposta = await this.consultar(texto);
-
-      pensando.remove();
-      await this.escreverLento("ele", resposta);
-      this.historico.push({ role: "assistant", content: resposta });
-
-      this.restantes--;
-      el.restantes.textContent = this.restantes;
-
-      if (this.restantes <= 0) {
-        el.pergunta.remove();
-        el.perguntar.remove();
-        setTimeout(() => this.desbloquear(), 900);
-      } else {
-        el.pergunta.disabled = false;
-        el.perguntar.disabled = false;
-        el.pergunta.focus();
-      }
-      this.ocupado = false;
-    },
-
-    // fim do oráculo: a casa se abre por dentro → a sala de estar
-    desbloquear() {
-      Estado.flag("oraculo_completo", true);
+      Estado.flag("oraculo_completo", true);   // a sala destranca
       renderizarMapa();
       destacarComodo("sala");
-      falar("a terceira já foi. mas a casa é maior por dentro. a sala de estar destrancou — subi você até o mapa.", { vermelho: true, pausaFinal: 4000 });
+      el.oraculo.hidden = false;
+      falar("a casa é maior por dentro. a sala de estar destrancou. quando se perder, peça — eu aponto o caminho.", { vermelho: true, pausaFinal: 3500 });
     },
 
-    async consultar(texto) {
-      try {
-        const r = await fetch("/api/oraculo", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ pergunta: texto, historico: this.historico.slice(-12), restantes: this.restantes })
-        });
-        if (!r.ok) throw new Error("http " + r.status);
-        const d = await r.json();
-        if (d && d.resposta) return d.resposta;
-        throw new Error("vazio");
-      } catch (e) {
-        return this.offline(texto);
-      }
+    // a próxima dica enigmática, na ordem lógica do progresso
+    proximaDica() {
+      if (!Estado.visitou("sala")) return "a sala de estar já se abriu no mapa aqui embaixo. entre — há um retrato sem rosto te encarando.";
+      if (!Estado.temSelo("sala")) return "na sala, o rosto que raspei esconde a primeira marca. toque no retrato do meio.";
+      if (!Estado.flag("livro_assinado")) return "assine o livro de visitas, aqui no saguão. a casa abre um quarto a quem diz o próprio nome.";
+      if (!Estado.temSelo("quarto")) return "entre no quarto e vire o diário até a última página. a segunda marca escorre por baixo dela.";
+      if (!Estado.flag("vela_pista")) return "toque na minha vela, aqui no saguão. insista. a chama se cansa e aponta pra cozinha.";
+      if (!Estado.temSelo("cozinha")) return "na cozinha, levante a tampa da panela. a terceira marca está no fundo — não olhe o que foge dela.";
+      if (!Estado.temSelo("corredor")) return "a sala e o quarto abriram o corredor escuro. caminhe até a última porta: a quarta marca está cravada nela.";
+      if (!Estado.flag("final_visto")) return "você tem as quatro marcas. desça ao porão. a fechadura pede a hora em que tudo parou — o relógio da sala nunca mentiu.";
+      return "você já viu o fundo da casa. mas eu nunca mostro tudo de uma vez. feche a aba, se conseguir — e volte. eu lembro de você.";
     },
 
-    offline(texto) {
-      const t = texto.toLowerCase();
-      const tem = (...ps) => ps.some((p) => t.includes(p));
-      if (tem("morr", "morte", "mort")) return "a morte não é uma porta. é esta sala. você já está nela.";
-      if (tem("medo", "assust", "pavor")) return "você pergunta do medo como quem não o trouxe consigo. ele entrou junto com você.";
-      if (tem("sozinh", "só", "solid", "ninguém")) return "você nunca esteve só aqui. eu contei cada vez que você achou que estava.";
-      if (tem("noite", "escuro", "dorm", "sono")) return "quando você apagar a luz hoje, lembre que eu não preciso dela pra te ver.";
-      if (tem("casa", "sair", "porta", "fechar", "voltar")) return "a porta está bem ali. sempre esteve. experimente. eu espero.";
-      if (tem("chave", "selo", "segredo", "senha")) return "os selos estão espalhados pelos cômodos. quatro. junte-os e o porão lembra de você.";
-      if (tem("nome", "quem é você", "quem e voce", "o que é você")) return "eu tive um nome quando esta casa tinha dono. agora eu uso o seu.";
-      if (tem("amor", "amo", "quero", "saudade", "perd")) return "o que você mais ama é o que você mais teme perder. eu já sei o nome dele.";
-      if (t.endsWith("?") || tem("por que", "porque", "como", "quando", "onde"))
-        return "você faz as perguntas erradas. a certa é: por que ainda não fechou esta aba?";
-      const ecos = [
-        "eu ouvi. eu guardo. eu devolvo quando você menos esperar.",
-        "curioso você dizer isso. o antigo morador disse quase igual, no fim.",
-        "cada palavra sua acende mais uma luz aqui dentro. logo dá pra ver tudo.",
-        "responda você: o que você não me contou ainda?"
-      ];
-      return ecos[Math.floor(Math.random() * ecos.length)];
+    pedir() {
+      if (this.ocupado) return;
+      this.ocupado = true;
+      const p = this.escrever("pensando", "");
+      setTimeout(() => {
+        p.remove();
+        this.escreverLento(this.proximaDica()).then(() => { this.ocupado = false; });
+      }, 600);
     },
 
     escrever(tipo, texto) {
       const div = document.createElement("div");
-      div.className = tipo === "ele pensando" ? "turno pensando" : "turno " + (tipo === "eu" ? "eu" : "ele");
+      div.className = tipo === "pensando" ? "turno pensando" : "turno ele";
       div.textContent = texto;
       el.dialogo.appendChild(div);
       el.dialogo.scrollTop = el.dialogo.scrollHeight;
       return div;
     },
 
-    escreverLento(tipo, texto) {
+    escreverLento(texto) {
       return new Promise((resolve) => {
-        const div = this.escrever(tipo, "");
+        const div = this.escrever("ele", "");
         let i = 0;
         const t = setInterval(() => {
           div.textContent += texto[i++];
@@ -360,9 +300,17 @@
       setTimeout(comecar, 800);
     }
 
-    el.perguntar.addEventListener("click", (e) => { e.stopPropagation(); ORACULO.perguntar(el.pergunta.value); });
-    el.pergunta.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); ORACULO.perguntar(el.pergunta.value); } });
-    el.pergunta.addEventListener("click", (e) => e.stopPropagation());
+    el.perguntar.addEventListener("click", (e) => { e.stopPropagation(); BUSSOLA.pedir(); });
+
+    if (el.recomecar) {
+      el.recomecar.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (confirm("Isto apaga seu progresso (selos, cômodos, nome) e recomeça a casa do zero. Continuar?")) {
+          Estado.reset();
+          location.reload();
+        }
+      });
+    }
 
     Casa.configurarSom(el.som);
     Casa.configurarTituloAba(() => S.cliques >= 4 && !S.finalizado);
