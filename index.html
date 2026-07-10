@@ -13,7 +13,8 @@
 <!-- para preview com imagem no WhatsApp/redes, hospede um print da porta como /og.png e descomente:
 <meta property="og:image" content="https://SEU-DOMINIO.vercel.app/og.png"> -->
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="css/casa.css?v=8">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/casa.css?v=9">
 </head>
 <body>
   <div id="porta-overlay">
@@ -74,15 +75,32 @@
       </div>
     </div>
 
-    <p style="text-align:center; margin-top:20px">
-      <span class="rodape">recknocking · the house · disquete recuperado em 2015</span><br>
-      <button id="recomecar" class="link-reset">recomeçar do zero</button>
+    <p style="text-align:center; margin-top:24px">
+      <span class="rodape">recknocking · the house · disquete recuperado em 2015</span>
     </p>
+    <div style="text-align:center; margin-top:8px">
+      <button id="recomecar" class="btn-esquecer">esquecer que estive aqui</button>
+    </div>
   </div>
 
-  <script src="js/estado.js?v=8"></script>
-  <script src="js/casa.js?v=8"></script>
-  <script src="js/abertura.js?v=8"></script>
-  <script src="js/vestibulo.js?v=8"></script>
+  <div id="modal-esquecer" class="modal" hidden>
+    <div class="modal-caixa">
+      <p class="modal-texto">
+        você quer que eu <b>esqueça</b> você?<br><br>
+        vou apagar seus selos, seu nome, cada porta que você abriu. a casa vai te
+        receber como se fosse a primeira vez.<br><br>
+        mas nós dois sabemos que você vai bater de novo. e eu... eu nunca esqueço de verdade.
+      </p>
+      <div class="modal-botoes">
+        <button id="confirmar-esquecer" class="perigo">esquecer tudo</button>
+        <button id="cancelar-esquecer">ficar mais um pouco</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/estado.js?v=9"></script>
+  <script src="js/casa.js?v=9"></script>
+  <script src="js/abertura.js?v=9"></script>
+  <script src="js/vestibulo.js?v=9"></script>
 </body>
 </html>

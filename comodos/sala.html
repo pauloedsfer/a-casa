@@ -4,17 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>sala de estar</title>
-<link rel="stylesheet" href="../css/casa.css?v=8">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/casa.css?v=9">
 <style>
   .parede{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin:22px 0 30px; }
-  .retrato{ width:92px; height:112px; border:3px solid var(--fg-dim); background:#0a0f0a; display:flex; align-items:center; justify-content:center; position:relative; }
-  .retrato .rosto{ width:46px; height:58px; border-radius:50% 50% 45% 45%; background:radial-gradient(circle at 50% 35%, rgba(51,255,102,.22), rgba(0,0,0,.6)); }
+  .retrato{ width:92px; height:112px; border:3px solid var(--fg-dim); background:#0a0f0a; display:flex; align-items:center; justify-content:center; position:relative; cursor:pointer; }
+  .retrato:hover{ border-color:var(--accent); }
+  .retrato .silhueta{ width:54px; height:66px; fill:rgba(51,255,102,.30); }
+  .retrato .caveira{ width:54px; height:66px; }
   .retrato .legenda{ position:absolute; bottom:-19px; left:0; right:0; text-align:center; font-size:10px; color:var(--fg-dim); letter-spacing:1px; }
-  .retrato:not(.sem-rosto){ cursor:pointer; }
-  .retrato:not(.sem-rosto):hover{ border-color:var(--accent); }
-  .retrato.sem-rosto{ cursor:pointer; }
-  .retrato.sem-rosto .rosto{ background:repeating-linear-gradient(45deg,#141414 0 4px,#000 4px 8px); }
+  .retrato.sem-rosto .raspado{ position:absolute; inset:0; background:repeating-linear-gradient(45deg,#141414 0 4px,#000 4px 8px); transition:opacity .7s; z-index:2; }
   .retrato.sem-rosto:hover{ border-color:var(--accent); box-shadow:0 0 14px rgba(51,255,102,.3); }
+  .retrato.sem-rosto.revelado .raspado{ opacity:0; pointer-events:none; }
 
   .relogio{ width:104px; height:104px; border:3px solid var(--fg-dim); border-radius:50%; position:relative; margin:8px auto 4px; cursor:pointer; }
   .relogio:hover{ border-color:var(--accent); }
@@ -40,9 +41,25 @@
     <div class="caixa">
       <p>a poeira é espessa, mas os retratos foram limpos há pouco. três rostos na parede — dois olham de volta. o do meio foi raspado até o gesso.</p>
       <div class="parede">
-        <div class="retrato"><div class="rosto"></div><span class="legenda">fundador</span></div>
-        <div class="retrato sem-rosto" id="retrato-sem-rosto"><div class="rosto"></div><span class="legenda">?</span></div>
-        <div class="retrato"><div class="rosto"></div><span class="legenda">1998</span></div>
+        <div class="retrato">
+          <svg class="silhueta" viewBox="0 0 46 58"><circle cx="23" cy="19" r="12"/><path d="M3 58 C 3 42, 13 35, 23 35 C 33 35, 43 42, 43 58 Z"/></svg>
+          <span class="legenda">fundador</span>
+        </div>
+        <div class="retrato sem-rosto" id="retrato-sem-rosto">
+          <svg class="caveira" viewBox="0 0 46 58">
+            <path d="M23 5 C 34 5, 40 13, 40 24 C 40 31, 36 35, 33 37 L 33 43 C 33 45, 31 47, 29 47 L 17 47 C 15 47, 13 45, 13 43 L 13 37 C 10 35, 6 31, 6 24 C 6 13, 12 5, 23 5 Z" fill="#d6e6d6"/>
+            <ellipse cx="16" cy="24" rx="5" ry="6.5" fill="#050805"/>
+            <ellipse cx="30" cy="24" rx="5" ry="6.5" fill="#050805"/>
+            <path d="M23 27 L 19.5 35 L 26.5 35 Z" fill="#050805"/>
+            <g fill="#050805"><rect x="15.5" y="41" width="2.4" height="6"/><rect x="19.5" y="41" width="2.4" height="6"/><rect x="23.5" y="41" width="2.4" height="6"/><rect x="27.5" y="41" width="2.4" height="6"/></g>
+          </svg>
+          <div class="raspado"></div>
+          <span class="legenda">?</span>
+        </div>
+        <div class="retrato">
+          <svg class="silhueta" viewBox="0 0 46 58"><path d="M8 24 C 8 8, 14 3, 23 3 C 32 3, 38 8, 38 24 C 38 30, 35 33, 35 33 L 11 33 C 11 33, 8 30, 8 24 Z" opacity=".55"/><circle cx="23" cy="19" r="10.5"/><path d="M4 58 C 4 43, 13 36, 23 36 C 33 36, 42 43, 42 58 Z"/></svg>
+          <span class="legenda">1998</span>
+        </div>
       </div>
     </div>
 
@@ -65,8 +82,8 @@
     <p class="nav"><a class="porta voltar aceso" href="../index.html">saguão</a></p>
   </div>
 
-  <script src="../js/estado.js?v=8"></script>
-  <script src="../js/casa.js?v=8"></script>
-  <script src="../js/sala.js?v=8"></script>
+  <script src="../js/estado.js?v=9"></script>
+  <script src="../js/casa.js?v=9"></script>
+  <script src="../js/sala.js?v=9"></script>
 </body>
 </html>

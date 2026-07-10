@@ -28,8 +28,7 @@
     knock();
     folha.classList.remove("treme"); void folha.offsetWidth; folha.classList.add("treme");
     luz.style.opacity = String(Math.min(0.15 + batidas * 0.18, 0.7));
-    if (batidas === 1) legenda.textContent = "de novo.";
-    else if (batidas === 2) legenda.textContent = "mais uma.";
+    if (batidas === 1) legenda.textContent = "mais uma.";
     else abrir();
   });
 

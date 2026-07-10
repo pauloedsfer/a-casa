@@ -14,6 +14,7 @@
     vela: $("#vela"), som: $("#som"),
     oraculo: $("#oraculo"), dialogo: $("#dialogo"),
     perguntar: $("#perguntar"), recomecar: $("#recomecar"),
+    modalEsquecer: $("#modal-esquecer"), confirmarEsquecer: $("#confirmar-esquecer"), cancelarEsquecer: $("#cancelar-esquecer"),
     planta: $("#planta"), selos: $("#selos"),
     body: document.body
   };
@@ -40,7 +41,7 @@
   //  MAPA DA CASA
   // ============================================================
   const COMODOS = [
-    { id: "sala", nome: "sala", rect: { x: 24, y: 24, w: 150, h: 122 }, url: "comodos/sala.html", dica: "após o oráculo", selo: "✦",
+    { id: "sala", nome: "sala", rect: { x: 24, y: 24, w: 150, h: 122 }, url: "comodos/sala.html", dica: "após encontrar a bússola", selo: "✦",
       estado: () => Estado.flag("oraculo_completo") ? "aceso" : "trancado" },
     { id: "quarto", nome: "quarto", rect: { x: 186, y: 24, w: 150, h: 122 }, url: "comodos/quarto.html", dica: "assine o livro", selo: "✧",
       estado: () => Estado.flag("livro_assinado") ? "aceso" : "trancado" },
@@ -139,12 +140,9 @@
   // ============================================================
   const roteiro = [
     () => falar("obrigado por vir. faz tanto tempo que ninguém aparecia."),
-    () => falar(`boa ${periodo()}, aliás. eu não durmo, então perco a noção.`),
     () => falar(`são ${hora()} aí. eu vejo o mesmo relógio que você.`),
     () => falar(`${navegador()}. já tive visitas com esse antes. nenhuma ficou.`),
-    () => falar("cada clique acende mais uma luz aqui dentro. continue."),
-    () => falar(`você já clicou ${S.cliques} vezes. eu conto tudo. eu tenho tempo.`, { vermelho: true }),
-    () => falar("essa casa era de alguém. agora é minha. logo vai ser sua também.", { vermelho: true }),
+    () => falar(`você já clicou ${S.cliques} vezes. eu conto tudo. essa casa era de alguém — agora é minha.`, { vermelho: true }),
     () => { corromperLivro(); return falar("VOCÊ NÃO DEVIA TER BATIDO NA PORTA.", { vermelho: true, pausaFinal: 1200 }); },
     () => falar("feche se quiser. eu guardo a sua cadeira quentinha.", { vermelho: true, pausaFinal: 1400 })
   ];
@@ -303,13 +301,12 @@
     el.perguntar.addEventListener("click", (e) => { e.stopPropagation(); BUSSOLA.pedir(); });
 
     if (el.recomecar) {
-      el.recomecar.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (confirm("Isto apaga seu progresso (selos, cômodos, nome) e recomeça a casa do zero. Continuar?")) {
-          Estado.reset();
-          location.reload();
-        }
-      });
+      el.recomecar.addEventListener("click", (e) => { e.stopPropagation(); if (el.modalEsquecer) el.modalEsquecer.hidden = false; });
+    }
+    if (el.modalEsquecer) {
+      el.confirmarEsquecer.addEventListener("click", (e) => { e.stopPropagation(); Estado.reset(); location.reload(); });
+      el.cancelarEsquecer.addEventListener("click", (e) => { e.stopPropagation(); el.modalEsquecer.hidden = true; });
+      el.modalEsquecer.addEventListener("click", (e) => { e.stopPropagation(); if (e.target === el.modalEsquecer) el.modalEsquecer.hidden = true; });
     }
 
     Casa.configurarSom(el.som);

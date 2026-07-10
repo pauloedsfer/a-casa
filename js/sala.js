@@ -23,11 +23,15 @@
       `<span class="legenda">selos: ${Estado.totalSelos()} de ${Estado.TOTAL_SELOS}</span>`;
   }
   renderSelos();
+  if (Estado.temSelo("sala")) {
+    const rv = document.getElementById("retrato-sem-rosto");
+    if (rv) rv.classList.add("revelado");
+  }
 
   setTimeout(() => {
     Casa.medo(0.3);
-    if (Estado.temSelo("sala")) Casa.falar("você já esteve aqui. o retrato sem rosto ainda te encara.", { vermelho: true });
-    else Casa.falar("a sala de estar. três retratos. os olhos seguem você. um deles não tem rosto.");
+    if (Estado.temSelo("sala")) Casa.falar("você já esteve aqui. a caveira do retrato ainda te encara.", { vermelho: true });
+    else Casa.falar("a sala de estar. três retratos. os olhos seguem você. o do meio foi raspado até não ter rosto.");
   }, 700);
 
   // retratos com rosto → migalhas de lore (deixadas em aberto de propósito)
@@ -46,11 +50,13 @@
     const jaTinha = Estado.temSelo("sala");
     Estado.coletarSelo("sala");
     Estado.flag("codigo_1", "3");
+    const r = document.getElementById("retrato-sem-rosto");
+    if (r) r.classList.add("revelado");
     $("#selo").hidden = false;
     Casa.medo(0.55);
     renderSelos();
-    if (jaTinha) Casa.falar("você já levou o que havia sob a tinta. ✦. o primeiro número era 3. ainda é.", { vermelho: true });
-    else Casa.falar("sob a tinta raspada, um sinal aceso: ✦. guarde o primeiro número — 3. o porão vai pedir.", { vermelho: true });
+    if (jaTinha) Casa.falar("a caveira continua ali, sob a tinta. ✦. o primeiro número era 3. ainda é.", { vermelho: true });
+    else Casa.falar("a tinta raspa e não há rosto embaixo — só um crânio te encarando. e um sinal aceso: ✦. o primeiro número é 3. o porão vai pedir.", { vermelho: true });
   }
 
   // relógio parado
