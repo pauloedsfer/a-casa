@@ -16,6 +16,7 @@
     perguntar: $("#perguntar"), recomecar: $("#recomecar"),
     modalEsquecer: $("#modal-esquecer"), confirmarEsquecer: $("#confirmar-esquecer"), cancelarEsquecer: $("#cancelar-esquecer"),
     planta: $("#planta"), selos: $("#selos"),
+    planta2: $("#planta2"), caixaAndar: $("#caixa-andar"),
     body: document.body
   };
 
@@ -87,6 +88,7 @@
     }
     inner += `<text class="cq-nome" x="${cx}" y="${r.y + 16}">${c.nome}</text>`;
     let dica = trancado ? c.dica : (c.hub ? "você está aqui" : (c.fora ? "do lado de fora" : ""));
+    if (st === "breve" && dica) dica += " · em breve";
     if (dica) inner += `<text class="cq-dica" x="${cx}" y="${r.y + r.h - 7}">${dica}</text>`;
     return `<g class="${cls}" data-id="${c.id}">${inner}</g>`;
   }
@@ -99,14 +101,35 @@
       + '<path class="porta-frente" d="M158 372 Q180 380 202 372"/>';
   }
 
-  function renderizarMapa() {
-    const p = ['<svg viewBox="0 0 360 430" class="planta-svg" role="img" aria-label="planta da casa vista de cima">'];
-    p.push(molduraSVG());
-    COMODOS.forEach((c) => p.push(comodoSVG(c, c.estado())));
+  function molduraAndarSVG() {
+    return '<rect class="parede-ext" x="16" y="14" width="328" height="196" rx="6"/>'
+      + '<rect x="158" y="206" width="44" height="8" fill="var(--bg)"/>'
+      + '<line class="porta-frente" x1="158" y1="206" x2="158" y2="220"/>'
+      + '<line class="porta-frente" x1="202" y1="206" x2="202" y2="220"/>'
+      + '<line class="mob" x1="160" y1="212" x2="200" y2="212"/>'
+      + '<line class="mob" x1="164" y1="217" x2="196" y2="217"/>';
+  }
+
+  // segundo andar — camada de lore, destrava com o selo IV (corredor)
+  const COMODOS_2 = [
+    { id: "sotao", nome: "sótão", rect: { x: 24, y: 22, w: 312, h: 56 }, dica: "o mecanismo",
+      estado: () => Estado.temSelo("corredor") ? "breve" : "trancado" },
+    { id: "escritorio", nome: "escritório", rect: { x: 24, y: 100, w: 96, h: 96 }, dica: "do pai",
+      estado: () => Estado.temSelo("corredor") ? "breve" : "trancado" },
+    { id: "criancas", nome: "crianças", rect: { x: 132, y: 100, w: 96, h: 96 }, dica: "risadas ao fundo",
+      estado: () => Estado.temSelo("corredor") ? "breve" : "trancado" },
+    { id: "lavanderia", nome: "lavanderia", rect: { x: 240, y: 100, w: 96, h: 96 }, url: "comodos/lavanderia.html", dica: "recém-aberta",
+      estado: () => Estado.temSelo("corredor") ? "aceso" : "trancado" }
+  ];
+
+  function desenharPlanta(comodos, plantaEl, vb, moldura) {
+    const p = [`<svg viewBox="${vb}" class="planta-svg" role="img" aria-label="planta da casa vista de cima">`];
+    p.push(moldura);
+    comodos.forEach((c) => p.push(comodoSVG(c, c.estado())));
     p.push("</svg>");
-    el.planta.innerHTML = p.join("");
-    COMODOS.forEach((c) => {
-      const g = el.planta.querySelector(`[data-id="${c.id}"]`);
+    plantaEl.innerHTML = p.join("");
+    comodos.forEach((c) => {
+      const g = plantaEl.querySelector(`[data-id="${c.id}"]`);
       if (!g) return;
       const st = c.estado();
       g.addEventListener("click", (e) => {
@@ -115,6 +138,14 @@
         else if (st !== "aceso" && c.dica) falar(`${c.nome}: ${c.dica}.`);
       });
     });
+  }
+
+  function renderizarMapa() {
+    desenharPlanta(COMODOS, el.planta, "0 0 360 430", molduraSVG());
+    if (Estado.temSelo("corredor")) {                 // o andar de cima abriu
+      if (el.caixaAndar) el.caixaAndar.hidden = false;
+      if (el.planta2) desenharPlanta(COMODOS_2, el.planta2, "0 0 360 226", molduraAndarSVG());
+    }
   }
 
   function destacarComodo(id) {

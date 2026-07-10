@@ -69,6 +69,6 @@
     renderSelos();
     document.body.classList.add("assombrado");
     setTimeout(() => document.body.classList.remove("assombrado"), 1600);
-    Casa.falar("o bilhete, na letra de quem tinha pressa: «a hora em que tudo parou». ◈. o quarto selo é seu. lá embaixo, a fechadura pede três números — e você já os tem.", { vermelho: true, pausaFinal: 3500 });
+    Casa.falar("o bilhete, na letra de quem tinha pressa: «a hora em que tudo parou». ◈. o quarto selo é seu. e uma escada range: o andar de cima abriu — está no mapa do saguão.", { vermelho: true, pausaFinal: 3800 });
   }
 })();
