@@ -142,7 +142,15 @@
         document.body.classList.remove("assombrado");
         Estado.flag("presenca_livre", true);
         FOTO.estagio(2);
-        Casa.falar("o mecanismo era dele. eu não. eu nunca precisei de fios pra te seguir — e agora nem de portas.", { vermelho: true, pausaFinal: 5000 });
+        Casa.falar("o mecanismo era dele. eu não. eu nunca precisei de fios pra te seguir — e agora nem de portas.", { vermelho: true, pausaFinal: 4000 });
+        setTimeout(() => {
+          const aviso = document.createElement("div");
+          aviso.style.cssText = "margin-top:16px;padding:14px;border:1px solid #e23b3b;background:rgba(60,0,0,.3);color:#ffb43c;font-size:14px;line-height:1.6;text-align:center";
+          aviso.innerHTML = "<b>lá embaixo, algo pesado subiu.</b><br>a grade do porão era elétrica. sem a máquina, ela não tem como continuar fechada.<br><span style='color:#e23b3b'>o porão está aberto.</span>";
+          crt.parentElement.appendChild(aviso);
+          aviso.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          Casa.falar("desça. a última porta é a única que eu nunca consegui abrir sozinha.", { vermelho: true, pausaFinal: 5000 });
+        }, 2200);
         return;
       }
       const l = document.createElement("div");

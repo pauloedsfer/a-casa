@@ -90,15 +90,19 @@
 
   function revelacaoFinal() {
     Estado.flag("lore_familia", true);
-    FOTO.estagio(2);   // aprofunda a história (usada pelos próximos cômodos)
+    Estado.flag("chave_criancas", true);   // a chave do quarto delas
+    FOTO.estagio(2);
     setTimeout(() => {
-      Casa.falar("eram três. ninguém fala deles lá embaixo. mas o quarto no andar de cima ainda os guarda.", { vermelho: true, pausaFinal: 4000 });
+      Casa.falar("eram três. e no meio dos lençóis dobrados havia uma chave — a do quarto delas. esconderam ali porque a mãe nunca deixava de dobrar.", { vermelho: true, pausaFinal: 4500 });
       const box = $("#achado");
       const fim = document.createElement("div");
       fim.style.marginTop = "10px";
       fim.style.borderTop = "1px solid #7a2020";
       fim.style.paddingTop = "12px";
-      fim.innerHTML = "<div class=\"item\">a lavanderia era o único cômodo que a mãe mantinha limpo. o único que ela ainda lavava, muito depois de não haver mais o que lavar.</div>";
+      fim.innerHTML =
+        "<div class=\"item\">a lavanderia era o único cômodo que a mãe mantinha limpo. o único que ela ainda lavava, muito depois de não haver mais o que lavar.</div>" +
+        "<div class=\"item\"><b>🔑 no fundo do cesto, entre os lençóis: uma chave pequena, de latão.</b><br>na etiqueta amarrada nela, em letra de criança: <i>«nosso quarto»</i>.</div>" +
+        "<div class=\"item\">o quarto das crianças destrancou — está no mapa do saguão.</div>";
       box.appendChild(fim);
     }, 1600);
   }

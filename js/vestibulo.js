@@ -8,6 +8,15 @@
   "use strict";
 
   const $ = (s) => document.querySelector(s);
+
+  // a fotografia do saguão (artefato achado na casa)
+  const FOTO = Foto.montar({
+    destino: "#foto", id: "saguao", pasta: "img/",
+    legenda: "saguão · a entrada",
+    velado: "clique para ver o saguão onde você está",
+    revelado: () => Estado.visitas > 1
+  });
+  FOTO.estagio(Estado.flag("final_visto") ? 2 : 0);
   const el = {
     titulo: $("#titulo"), sub: $("#sub"), boasvindas: $("#boasvindas"),
     odometro: $("#odometro"), livro: $("#livro"), nome: $("#nome"), assinar: $("#assinar"),
@@ -112,13 +121,13 @@
 
   // segundo andar — camada de lore, destrava com o selo IV (corredor)
   const COMODOS_2 = [
-    { id: "sotao", nome: "sótão", rect: { x: 24, y: 22, w: 312, h: 56 }, url: "comodos/sotao.html", dica: "ache a senha no escritório",
-      estado: () => !Estado.temSelo("corredor") ? "trancado" : (Estado.flag("senha_sotao") ? "aceso" : "trancado") },
-    { id: "escritorio", nome: "escritório", rect: { x: 24, y: 100, w: 96, h: 96 }, url: "comodos/escritorio.html", dica: "do pai",
-      estado: () => Estado.temSelo("corredor") ? "aceso" : "trancado" },
-    { id: "criancas", nome: "crianças", rect: { x: 132, y: 100, w: 96, h: 96 }, url: "comodos/criancas.html", dica: "depois da lavanderia",
-      estado: () => !Estado.temSelo("corredor") ? "trancado" : (Estado.flag("lore_familia") ? "aceso" : "trancado") },
-    { id: "lavanderia", nome: "lavanderia", rect: { x: 240, y: 100, w: 96, h: 96 }, url: "comodos/lavanderia.html", dica: "recém-aberta",
+    { id: "sotao", nome: "sótão", rect: { x: 24, y: 22, w: 312, h: 56 }, url: "comodos/sotao.html", dica: "a senha está no escritório",
+      estado: () => Estado.flag("senha_sotao") ? "aceso" : "trancado" },
+    { id: "escritorio", nome: "escritório", rect: { x: 24, y: 100, w: 96, h: 96 }, url: "comodos/escritorio.html", dica: "a chave está com as crianças",
+      estado: () => Estado.flag("chave_escritorio") ? "aceso" : "trancado" },
+    { id: "criancas", nome: "crianças", rect: { x: 132, y: 100, w: 96, h: 96 }, url: "comodos/criancas.html", dica: "a chave está na lavanderia",
+      estado: () => Estado.flag("chave_criancas") ? "aceso" : "trancado" },
+    { id: "lavanderia", nome: "lavanderia", rect: { x: 240, y: 100, w: 96, h: 96 }, url: "comodos/lavanderia.html", dica: "abre com o corredor",
       estado: () => Estado.temSelo("corredor") ? "aceso" : "trancado" }
   ];
 
@@ -241,12 +250,13 @@
       if (!Estado.flag("vela_pista")) return "toque na minha vela. insista até doer nos olhos. ela aponta pra onde a casa ainda tem fome.";
       if (!Estado.temSelo("cozinha")) return "a panela na cozinha. levante a tampa. o que sai dali vive de coisas que ninguém veio buscar.";
       if (!Estado.temSelo("corredor")) return "o corredor. ande até a última porta. conte as outras enquanto passa — e não abra nenhuma.";
-      if (!Estado.flag("final_visto")) return `quatro marcas, ${n}. desça. a fechadura quer a hora em que tudo parou, e você já a viu num relógio que não anda.`;
-      if (!Estado.flag("lore_familia")) return "lá em cima a lavanderia continua limpa. limpa demais. é o único cômodo que ela ainda esfregava depois que não havia mais nada pra esfregar.";
-      if (!Estado.flag("lore_criancas")) return "o quarto delas. eram três. os brinquedos ainda se mexem quando você desvia o olhar — e param, educadinhos, quando você volta.";
-      if (!Estado.flag("senha_sotao")) return "o escritório dele. quatro livros têm marcas a lápis. quem escreveu não morava aqui — só entrou, como você.";
-      if (!Estado.flag("mecanismo_revelado")) return "o sótão. tem uma máquina lá que ele achou que era eu. vá ver. digite o ano. eu quero que você veja.";
-      if (!Estado.flag("presenca_livre")) return "o terminal ainda pergunta se você quer desligar. pergunte a si mesmo por que eu te trouxe até ele.";
+      // a corrente do andar de cima
+      if (!Estado.flag("lore_familia")) return "a lavanderia, lá em cima. limpa demais. abra as máquinas — e vasculhe as roupas dobradas: há algo de metal entre os lençóis.";
+      if (!Estado.flag("lore_criancas")) return "o quarto delas. eram três. toque nos três brinquedos — um deles guarda o que o pai trancou.";
+      if (!Estado.flag("senha_sotao")) return "o escritório dele. quatro livros têm marcas a lápis. quem escreveu não morava aqui — só entrou, como você. os números estão nas margens.";
+      if (!Estado.flag("mecanismo_revelado")) return "o sótão. digite o ano. tem uma máquina lá que ele achou que era eu — e eu quero muito que você a veja de perto.";
+      if (!Estado.flag("presenca_livre")) return "o terminal pergunta se você quer desligar. diga que sim. faça isso por mim — é a única coisa que eu nunca pude fazer sozinha.";
+      if (!Estado.flag("final_visto")) return `a grade do porão subiu, ${n}. desça. a fechadura quer a hora em que tudo parou, e você já a viu num relógio que não anda.`;
       return `acabou, ${n}. você abriu tudo, viu tudo, soltou tudo. e agora só resta a parte que você não controla: dormir.`;
     },
 

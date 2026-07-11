@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>porão</title>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../css/casa.css?v=16">
+<link rel="stylesheet" href="../css/casa.css?v=17">
 <style>
   .fechadura{ text-align:center; }
   .visor{ display:inline-flex; gap:10px; margin:10px 0 18px; }
@@ -38,7 +38,35 @@
 
     <div id="foto"></div>
 
-    <div class="caixa" id="caixa-fechadura">
+    <div class="caixa" id="caixa-grade">
+      <p style="text-align:center">a escada desce e termina numa <b>grade de ferro</b>, do chão ao teto. atrás dela, a fechadura — perto o bastante pra você ler os números, longe demais pra alcançar.</p>
+      <div class="grade-cena" id="grade-cena">
+        <svg class="grade-svg" viewBox="0 0 300 200" role="img" aria-label="grade de ferro trancada">
+          <rect class="escuro" x="18" y="14" width="264" height="172" rx="4"/>
+          <g class="grade-movel">
+            <line class="barra" x1="42"  y1="18" x2="42"  y2="182"/>
+            <line class="barra" x1="82"  y1="18" x2="82"  y2="182"/>
+            <line class="barra" x1="122" y1="18" x2="122" y2="182"/>
+            <line class="barra" x1="162" y1="18" x2="162" y2="182"/>
+            <line class="barra" x1="202" y1="18" x2="202" y2="182"/>
+            <line class="barra" x1="242" y1="18" x2="242" y2="182"/>
+            <line class="barra" x1="24" y1="52"  x2="276" y2="52"/>
+            <line class="barra" x1="24" y1="148" x2="276" y2="148"/>
+          </g>
+          <rect class="moldura" x="18" y="14" width="264" height="172" rx="4"/>
+          <g class="tranca">
+            <rect x="128" y="86" width="44" height="30" rx="4"/>
+            <circle cx="150" cy="101" r="5" fill="#050303"/>
+          </g>
+        </svg>
+        <p class="aviso-grade" id="aviso-grade">
+          a tranca é elétrica. um cabo grosso sobe da grade e some pelo teto — <b>rumo ao sótão</b>.<br>
+          enquanto a máquina lá em cima estiver viva, esta grade não abre.
+        </p>
+      </div>
+    </div>
+
+    <div class="caixa" id="caixa-fechadura" hidden>
       <p style="text-align:center">uma porta sem maçaneta. só a fechadura, e a lembrança de uma hora que a casa nunca esqueceu.</p>
       <div class="fechadura">
         <div class="visor" id="visor"><span>_</span><span>_</span><span>_</span></div>
@@ -59,9 +87,9 @@
     <p class="assinado" style="text-align:center;font-size:12px;color:var(--fg-dim)">recknocking · the house</p>
   </div>
 
-  <script src="../js/estado.js?v=16"></script>
-  <script src="../js/casa.js?v=16"></script>
-  <script src="../js/foto.js?v=16"></script>
-  <script src="../js/porao.js?v=16"></script>
+  <script src="../js/estado.js?v=17"></script>
+  <script src="../js/casa.js?v=17"></script>
+  <script src="../js/foto.js?v=17"></script>
+  <script src="../js/porao.js?v=17"></script>
 </body>
 </html>

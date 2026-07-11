@@ -29,9 +29,38 @@
   function gesto() { if (entrou) return; entrou = true; Casa.audio.iniciar(); Casa.audio.reagir(0.85); }
   document.addEventListener("click", gesto);
 
+  // ---- a grade: só sobe quando o mecanismo do sótão morre ----
+  const grade = $("#grade-cena");
+  const livre = Estado.flag("presenca_livre");   // o jogador desligou o sistema
+
+  if (livre) {
+    // a grade já está aberta (ou abre agora, com estardalhaço)
+    if (!Estado.flag("grade_aberta")) {
+      Estado.flag("grade_aberta", true);
+      setTimeout(() => {
+        grade.classList.add("aberta");
+        Casa.audio.iniciar();
+        Casa.audio.batida(42, 1.6, 0.4);
+        document.body.classList.add("assombrado");
+        setTimeout(() => document.body.classList.remove("assombrado"), 1800);
+        $("#aviso-grade").innerHTML = "<b>a grade subiu.</b> o cabo que a prendia está morto — você mesmo o matou lá em cima.";
+        Casa.falar("a máquina que segurava esta grade não existe mais. você a desligou. eu só precisava de alguém disposto a fazer isso por mim.", { vermelho: true, pausaFinal: 4000 });
+        setTimeout(() => {
+          $("#caixa-fechadura").hidden = false;
+          $("#caixa-fechadura").scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 2600);
+      }, 900);
+    } else {
+      grade.classList.add("aberta");
+      $("#aviso-grade").innerHTML = "<b>a grade está aberta.</b> ela nunca mais desce — não há mais mecanismo pra baixá-la.";
+      $("#caixa-fechadura").hidden = false;
+    }
+  }
+
   setTimeout(() => {
     if (Estado.flag("final_visto")) Casa.falar("você já desceu até aqui. a porta continua aberta. ela sempre vai continuar.", { vermelho: true });
-    else Casa.falar("o porão. a fechadura pede três números. você os carrega desde a sala.", { vermelho: true });
+    else if (!livre) Casa.falar("você chegou ao fundo — e encontrou ferro. a casa ainda tem uma máquina viva, e ela decide quem passa. suba. mate-a.", { vermelho: true });
+    else Casa.falar("a fechadura pede três números. você os carrega desde a sala.", { vermelho: true });
   }, 700);
 
   const visor = $("#visor");

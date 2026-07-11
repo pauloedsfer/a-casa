@@ -101,6 +101,7 @@
 
   function revelacaoFinal() {
     Estado.flag("lore_criancas", true);
+    Estado.flag("chave_escritorio", true);   // a chave da sala do pai
     FOTO.estagio(2);
     const fim = document.createElement("div");
     fim.className = "sussurro";
@@ -109,7 +110,14 @@
     fim.style.paddingTop = "12px";
     fim.innerHTML = "bá, tetê, joão. três nomes riscados por dentro da porta. a versão de vocês é mais doce que a verdade — mas os desenhos na parede não mentem, e vocês ainda riem quando ninguém escuta.";
     $("#sussurros").appendChild(fim);
-    Casa.falar("agora você conhece os nomes. eles não vão te deixar esquecer.", { vermelho: true, pausaFinal: 4000 });
+
+    const chave = document.createElement("div");
+    chave.className = "sussurro";
+    chave.innerHTML = "<b>🔑</b> dentro do urso, pela costura aberta nas costas, cai uma chave de escritório.<br>o joão escondeu ali. <i>«a gente pegou a chave do papai pra ele não trancar mais»</i>.";
+    $("#sussurros").appendChild(chave);
+    chave.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    Casa.falar("agora você conhece os nomes. e eles te deram a chave do escritório dele — as crianças sempre quiseram que alguém entrasse ali.", { vermelho: true, pausaFinal: 4500 });
   }
 
   $("#cavalo").addEventListener("click", (e) => { e.stopPropagation(); revelar("cavalo"); });

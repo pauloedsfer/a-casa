@@ -300,3 +300,16 @@ body.sotao::after{ background:radial-gradient(ellipse at center, rgba(0,0,0,0) 4
 @keyframes glitch{ 0%{ transform: translate(0); text-shadow: -2px 0 red, 2px 0 cyan; } 100%{ transform: translate(1px,-1px); text-shadow: 2px 0 red, -2px 0 cyan; } }
 
 @media (prefers-reduced-motion: reduce){ body, #voz .cursor, .glitch, .vela .fogo, .selos .selo{ animation: none !important; } }
+
+/* ---- a grade do porão: só sobe quando o mecanismo morre ---- */
+.grade-cena{ text-align:center; position:relative; }
+.grade-svg{ width:100%; max-width:320px; height:auto; display:block; margin:0 auto; }
+.grade-svg .moldura{ stroke:#4a443c; stroke-width:9; fill:none; }
+.grade-svg .barra{ stroke:#6b6257; stroke-width:7; stroke-linecap:round; }
+.grade-svg .tranca{ fill:#8a1f1f; stroke:#c0392b; stroke-width:2; transition:opacity .5s; }
+.grade-svg .escuro{ fill:#050303; }
+.grade-movel{ transition:transform 2.6s cubic-bezier(.45,0,.15,1); }
+.grade-cena.aberta .grade-movel{ transform:translateY(-128px); }
+.grade-cena.aberta .tranca{ opacity:0; }
+.aviso-grade{ font-size:13.5px; color:var(--fg-dim); margin-top:14px; line-height:1.6; }
+.aviso-grade b{ color:var(--accent); }
