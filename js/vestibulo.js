@@ -112,12 +112,12 @@
 
   // segundo andar — camada de lore, destrava com o selo IV (corredor)
   const COMODOS_2 = [
-    { id: "sotao", nome: "sótão", rect: { x: 24, y: 22, w: 312, h: 56 }, dica: "o mecanismo",
-      estado: () => Estado.temSelo("corredor") ? "breve" : "trancado" },
-    { id: "escritorio", nome: "escritório", rect: { x: 24, y: 100, w: 96, h: 96 }, dica: "do pai",
-      estado: () => Estado.temSelo("corredor") ? "breve" : "trancado" },
-    { id: "criancas", nome: "crianças", rect: { x: 132, y: 100, w: 96, h: 96 }, dica: "risadas ao fundo",
-      estado: () => Estado.temSelo("corredor") ? "breve" : "trancado" },
+    { id: "sotao", nome: "sótão", rect: { x: 24, y: 22, w: 312, h: 56 }, url: "comodos/sotao.html", dica: "ache a senha no escritório",
+      estado: () => !Estado.temSelo("corredor") ? "trancado" : (Estado.flag("senha_sotao") ? "aceso" : "trancado") },
+    { id: "escritorio", nome: "escritório", rect: { x: 24, y: 100, w: 96, h: 96 }, url: "comodos/escritorio.html", dica: "do pai",
+      estado: () => Estado.temSelo("corredor") ? "aceso" : "trancado" },
+    { id: "criancas", nome: "crianças", rect: { x: 132, y: 100, w: 96, h: 96 }, url: "comodos/criancas.html", dica: "depois da lavanderia",
+      estado: () => !Estado.temSelo("corredor") ? "trancado" : (Estado.flag("lore_familia") ? "aceso" : "trancado") },
     { id: "lavanderia", nome: "lavanderia", rect: { x: 240, y: 100, w: 96, h: 96 }, url: "comodos/lavanderia.html", dica: "recém-aberta",
       estado: () => Estado.temSelo("corredor") ? "aceso" : "trancado" }
   ];

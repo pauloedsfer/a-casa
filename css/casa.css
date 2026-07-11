@@ -192,6 +192,60 @@ body.porao::before{ opacity:.55; }
 body.porao::after{ background: radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(20,0,0,0.9) 100%); }
 body.porao h1{ text-shadow:0 0 12px rgba(226,59,59,0.7); }
 
+/* ---- quarto das crianças: pastel noturno, papel de parede de estrelinhas ---- */
+body.criancas{ --fg:#d8d2ee; --fg-dim:#8f88b0; --bg:#0e0e1c; --accent:#d98ab0; --medo:0.4;
+  background-color:#0e0e1c; background-image:radial-gradient(rgba(180,170,220,.10) 1.4px, transparent 1.4px); background-size:22px 22px; }
+body.criancas::before{ opacity:.25; }
+body.criancas::after{ background:radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(6,6,16,0.85) 100%); }
+.brinquedos{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin:22px 0; }
+.brinquedo{ background:rgba(30,26,50,.5); border:1px solid #3a3358; border-radius:14px; padding:14px; cursor:pointer; width:112px; text-align:center; color:var(--fg); font-family:inherit; letter-spacing:0; text-transform:none; transition:transform .9s ease, box-shadow .2s, border-color .2s; }
+.brinquedo:hover{ box-shadow:0 0 14px rgba(217,138,176,.3); border-color:var(--accent); background:rgba(30,26,50,.5); }
+.brinquedo svg{ width:56px; height:56px; }
+.brinquedo .toy{ fill:none; stroke:#b9b0d8; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.brinquedo.revelado .toy{ stroke:var(--accent); }
+.brinquedo .etiqueta{ display:block; font-size:11px; color:var(--fg-dim); margin-top:8px; letter-spacing:2px; }
+.brinquedo.revelado .etiqueta{ color:var(--accent); text-shadow:0 0 6px rgba(217,138,176,.5); }
+.balanca{ transform-origin:50% 90%; animation:balancar 2.6s ease-in-out infinite; }
+@keyframes balancar{ 0%,100%{ transform:rotate(-6deg); } 50%{ transform:rotate(6deg); } }
+.sussurros{ margin:16px auto 0; max-width:440px; }
+.sussurro{ padding:9px 0; border-bottom:1px dotted rgba(217,138,176,.2); font-size:14px; font-style:italic; color:var(--fg); }
+.sussurro b{ color:var(--accent); font-style:normal; }
+
+/* ---- escritório: madeira, veludo, charuto ---- */
+body.escritorio{ --fg:#e3cba4; --fg-dim:#a08256; --bg:#150f0a; --accent:#c8963e; --medo:0.35; }
+body.escritorio::before{ opacity:.3; }
+body.escritorio::after{ background:radial-gradient(ellipse at 50% 40%, rgba(200,150,62,0.07) 0%, rgba(0,0,0,0) 45%, rgba(8,5,2,0.9) 100%); }
+body.escritorio .caixa{ background:rgba(45,28,14,0.35); border-color:#4d3620; box-shadow:inset 0 0 30px rgba(0,0,0,0.7); }
+body.escritorio h1{ text-shadow:0 0 12px rgba(200,150,62,0.55); }
+.estante{ display:flex; gap:7px; justify-content:center; flex-wrap:wrap; align-items:flex-end; padding:14px 0 6px; border-bottom:6px solid #4d3620; }
+.livro{ width:30px; border:1px solid #6b4a28; border-radius:2px 2px 0 0; cursor:pointer; padding:0; background:linear-gradient(180deg,#7a4a2a,#4a2b16); position:relative; transition:transform .25s, box-shadow .25s; }
+.livro:hover{ transform:translateY(-9px); box-shadow:0 0 14px rgba(200,150,62,.45); background:linear-gradient(180deg,#8a5a34,#5a331a); }
+.livro.lido{ background:linear-gradient(180deg,#3a2410,#241608); border-color:#c8963e; }
+.livro .lombada{ writing-mode:vertical-rl; text-orientation:mixed; font-size:9px; color:#e3cba4; padding:8px 0; letter-spacing:1px; text-transform:none; white-space:nowrap; overflow:hidden; }
+.marcado{ margin-top:16px; }
+.marcado .nota{ padding:10px 0; border-bottom:1px dotted rgba(200,150,62,.22); font-size:14px; }
+.marcado .nota .cit{ color:var(--accent); font-style:italic; }
+.digito{ display:inline-block; min-width:26px; text-align:center; color:var(--accent); font-weight:bold; font-size:19px; text-shadow:0 0 10px var(--accent); border-bottom:2px solid var(--accent); margin:0 2px; }
+
+/* ---- sótão: poeira, fiação, o velho monitor âmbar ---- */
+body.sotao{ --fg:#c8b28a; --fg-dim:#7d6a4c; --bg:#0b0906; --accent:#ffb43c; --medo:0.55; }
+body.sotao::before{ opacity:.45; }
+body.sotao::after{ background:radial-gradient(ellipse at center, rgba(0,0,0,0) 42%, rgba(0,0,0,0.92) 100%); }
+.crt{ background:#0a0d07; border:10px solid #2a2a24; border-radius:12px; padding:18px; box-shadow:inset 0 0 46px rgba(0,0,0,.9), 0 0 26px rgba(255,180,60,.14); font-family:"Courier New",monospace; }
+.crt .linha{ color:#ffb43c; font-size:13.5px; line-height:1.75; text-shadow:0 0 7px rgba(255,180,60,.65); white-space:pre-wrap; }
+.crt .prompt{ color:#8d7a52; }
+.crt-senha{ display:flex; gap:8px; margin-top:14px; }
+.crt-senha input{ flex:1; background:#000; border:1px solid #7d6a4c; color:#ffb43c; padding:9px; font-family:inherit; font-size:15px; letter-spacing:5px; text-align:center; }
+.crt-senha input:focus{ outline:none; box-shadow:0 0 10px rgba(255,180,60,.55); }
+.crt-senha input.erro{ border-color:#e23b3b; color:#e23b3b; animation:tremor .1s steps(2) 4; }
+.fiacao{ display:block; width:100%; height:66px; margin-bottom:4px; }
+.fio{ fill:none; stroke:#5d4f36; stroke-width:2; }
+.fio.vivo{ stroke:var(--accent); filter:drop-shadow(0 0 4px var(--accent)); animation:pulsar-fio 2.1s ease-in-out infinite; }
+@keyframes pulsar-fio{ 0%,100%{ opacity:.42; } 50%{ opacity:1; } }
+.poeira{ position:fixed; inset:0; pointer-events:none; z-index:2; }
+.grao{ position:absolute; width:2px; height:2px; background:rgba(230,215,180,.5); border-radius:50%; animation:cair linear infinite; }
+@keyframes cair{ 0%{ transform:translateY(-10vh) translateX(0); opacity:0; } 10%{ opacity:.7; } 90%{ opacity:.5; } 100%{ transform:translateY(110vh) translateX(28px); opacity:0; } }
+
 /* ---- tela de abertura: bata para entrar ---- */
 #porta-overlay{ position:fixed; inset:0; z-index:99999; background:#050301; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; cursor:pointer; perspective:1100px; transition:opacity 1s ease; }
 #porta-overlay.saindo{ opacity:0; pointer-events:none; }

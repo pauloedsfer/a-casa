@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sótão</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/casa.css?v=12">
+</head>
+<body class="sotao">
+  <div class="tela">
+    <button id="som" class="som" aria-label="ligar ou desligar som" title="som">&#9834;</button>
+    <h1>sótão</h1>
+    <p class="sub">poeira, fiação, e um zumbido que nunca parou.</p>
+    <div class="presenca"><span id="voz-texto"></span><span class="cursor">▊</span></div>
+
+    <div class="caixa">
+      <svg class="fiacao" viewBox="0 0 320 66" aria-hidden="true">
+        <path class="fio" d="M0 14 C 60 4, 90 30, 150 20 C 210 10, 250 34, 320 22"/>
+        <path class="fio vivo" d="M0 34 C 70 24, 100 50, 160 40 C 220 30, 260 54, 320 42"/>
+        <path class="fio" d="M0 54 C 50 46, 110 62, 170 52 C 230 42, 270 60, 320 54"/>
+      </svg>
+      <p>o sótão é o avesso da casa: cabos grossos descem por dentro das paredes, relés antigos estalam sozinhos, e há um painel de trancas — uma alavanca para cada porta lá embaixo. tudo isso está funcionando. há décadas. sem ninguém.</p>
+      <p>a casa <b>é</b> uma máquina. alguém a construiu para receber, registrar e trancar. está tudo aqui, à mostra, coberto de poeira.</p>
+    </div>
+
+    <div class="caixa">
+      <h2>o computador</h2>
+      <div class="crt">
+        <div class="linha" id="tela-crt"><span class="prompt">CASA-1998 v0.4 · terminal local
+sistema ativo há 10.247 dias
+</span>autenticação necessária ▊</div>
+        <div class="crt-senha" id="area-senha">
+          <input id="senha" type="text" maxlength="4" placeholder="••••" autocomplete="off" inputmode="numeric">
+          <button id="entrar">entrar</button>
+        </div>
+      </div>
+      <p id="dica-senha" style="font-size:12px;color:var(--fg-dim);text-align:center;margin-top:10px">quatro dígitos. o escritório sabe.</p>
+    </div>
+
+    <p class="nav"><a class="porta voltar aceso" href="../index.html">saguão</a></p>
+    <p class="assinado" style="text-align:center;font-size:12px;color:var(--fg-dim)">recknocking · the house</p>
+  </div>
+
+  <div class="poeira" id="poeira"></div>
+
+  <script src="../js/estado.js?v=12"></script>
+  <script src="../js/casa.js?v=12"></script>
+  <script src="../js/comodo.js?v=12"></script>
+  <script src="../js/sotao.js?v=12"></script>
+</body>
+</html>
