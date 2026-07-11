@@ -38,11 +38,11 @@
     folha.classList.remove("treme");
     luz.style.opacity = "1";
     Casa.audio.batida(58, 1.4, 0.42);        // baque grave: a porta cede
-    overlay.classList.add("abrindo");        // fase 1: a porta gira (1.7s, bem visível)
-    setTimeout(() => overlay.classList.add("saindo"), 1500);  // fase 2: só então a tela clareia
+    overlay.classList.add("abrindo");        // fase 1: a porta gira (1.15s)
+    setTimeout(() => overlay.classList.add("saindo"), 750);   // fase 2: o fade já entra enquanto ela gira
     setTimeout(() => {                        // fase 3: some e entra na casa
       overlay.remove();
       window.dispatchEvent(new Event("casa:entrou"));
-    }, 2600);
+    }, 1450);
   }
 })();

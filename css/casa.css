@@ -247,11 +247,11 @@ body.sotao::after{ background:radial-gradient(ellipse at center, rgba(0,0,0,0) 4
 @keyframes cair{ 0%{ transform:translateY(-10vh) translateX(0); opacity:0; } 10%{ opacity:.7; } 90%{ opacity:.5; } 100%{ transform:translateY(110vh) translateX(28px); opacity:0; } }
 
 /* ---- tela de abertura: bata para entrar ---- */
-#porta-overlay{ position:fixed; inset:0; z-index:99999; background:#050301; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; cursor:pointer; perspective:1100px; transition:opacity 1s ease; }
+#porta-overlay{ position:fixed; inset:0; z-index:99999; background:#050301; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; cursor:pointer; perspective:1100px; transition:opacity .7s ease; }
 #porta-overlay.saindo{ opacity:0; pointer-events:none; }
 .porta-cena{ position:relative; width:210px; height:350px; transform-style:preserve-3d; }
-.porta-luz{ position:absolute; inset:-30px; background:radial-gradient(ellipse at center, rgba(255,210,140,0.9), rgba(255,180,90,0) 70%); opacity:0; transition:opacity .6s; }
-.porta-folha{ position:absolute; inset:0; background:linear-gradient(150deg,#3a2a1a,#180f07); border:6px solid #241811; border-radius:10px 10px 2px 2px; box-shadow: inset 0 0 0 6px rgba(0,0,0,0.35), inset 0 0 50px rgba(0,0,0,0.7); transform-origin:left center; transition:transform 1.7s cubic-bezier(.33,0,.15,1); backface-visibility:hidden; }
+.porta-luz{ position:absolute; inset:-30px; background:radial-gradient(ellipse at center, rgba(255,210,140,0.9), rgba(255,180,90,0) 70%); opacity:0; transition:opacity .35s; }
+.porta-folha{ position:absolute; inset:0; background:linear-gradient(150deg,#3a2a1a,#180f07); border:6px solid #241811; border-radius:10px 10px 2px 2px; box-shadow: inset 0 0 0 6px rgba(0,0,0,0.35), inset 0 0 50px rgba(0,0,0,0.7); transform-origin:left center; transition:transform 1.15s cubic-bezier(.4,0,.2,1); backface-visibility:hidden; }
 #porta-overlay.abrindo .porta-folha{ transform:rotateY(-96deg); }
 .porta-folha::before, .porta-folha::after{ content:""; position:absolute; left:26px; right:40px; height:118px; border:3px solid rgba(0,0,0,0.45); border-radius:4px; }
 .porta-folha::before{ top:28px; }
