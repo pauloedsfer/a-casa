@@ -170,12 +170,12 @@
   //  ROTEIRO — o que a casa diz em cada clique
   // ============================================================
   const roteiro = [
-    () => falar("obrigado por vir. faz tanto tempo que ninguém aparecia."),
-    () => falar(`são ${hora()} aí. eu vejo o mesmo relógio que você.`),
-    () => falar(`${navegador()}. já tive visitas com esse antes. nenhuma ficou.`),
-    () => falar(`você já clicou ${S.cliques} vezes. eu conto tudo. essa casa era de alguém — agora é minha.`, { vermelho: true }),
+    () => falar("você bateu. eu abri. nenhum de nós dois pode fingir que isso não aconteceu."),
+    () => falar(`são ${hora()} aí. eu vejo o mesmo relógio que você — só que o meu nunca andou.`),
+    () => falar("não vim até você. você é que veio. lembre disso quando quiser me culpar.", { vermelho: true }),
+    () => falar(`${S.cliques} cliques. cada um foi você me dizendo: mais um pouco. mais um pouco. eu obedeço.`, { vermelho: true }),
     () => { corromperLivro(); return falar("VOCÊ NÃO DEVIA TER BATIDO NA PORTA.", { vermelho: true, pausaFinal: 1200 }); },
-    () => falar("feche se quiser. eu guardo a sua cadeira quentinha.", { vermelho: true, pausaFinal: 1400 })
+    () => falar("feche a aba. sério, feche. e depois repare no silêncio da sua casa — e em como ele te escuta de volta.", { vermelho: true, pausaFinal: 1600 })
   ];
 
   function corromperLivro() {
@@ -203,12 +203,14 @@
     el.body.classList.remove("glitch");
     el.titulo.classList.remove("glitch");
     S.medo = 0; aplicarMedo();
-    el.titulo.textContent = "~ minha casa ~";
-    el.sub.textContent = "um cantinho meu na internet · desde 1998";
+    BUSSOLA.abrir();
+
+    // o falso reinício: tudo "normal" de novo — só que agora ela sabe seu nome
+    el.titulo.textContent = "++ A CASA ++";
+    el.sub.textContent = "sempre esperando visitantes · desde 1998";
     const nome = Estado.nome || "você";
     el.boasvindas.innerHTML = `oi de novo! seja bem-vindo(a), <b>${escapar(nome)}</b>. faz muito tempo que ninguém aparece por aqui. 🙂`;
-    await falar(`atualize a página quando quiser. eu vou lembrar de você, ${nome}.`, { pausaFinal: 2200 });
-    BUSSOLA.abrir();
+    setTimeout(() => falar(`quando você fechar isto, ${nome}, a casa não fecha junto. ela só espera.`, { vermelho: true, pausaFinal: 3000 }), 2600);
   }
 
   // ============================================================
@@ -226,20 +228,26 @@
       renderizarMapa();
       destacarComodo("sala");
       el.oraculo.hidden = false;
-      falar("a casa é maior por dentro. a sala de estar destrancou. quando se perder, peça — eu aponto o caminho.", { vermelho: true, pausaFinal: 3500 });
+      falar("a casa é maior por dentro do que por fora. sempre foi. quando você se perder — e você vai — peça. eu gosto de ser pedida.", { vermelho: true, pausaFinal: 3500 });
     },
 
     // a próxima dica enigmática, na ordem lógica do progresso
     proximaDica() {
-      if (!Estado.visitou("sala")) return "a sala de estar já se abriu no mapa aqui embaixo. entre — há um retrato sem rosto te encarando.";
-      if (!Estado.temSelo("sala")) return "na sala, o rosto que raspei esconde a primeira marca. toque no retrato do meio.";
-      if (!Estado.flag("livro_assinado")) return "assine o livro de visitas, aqui no saguão. a casa abre um quarto a quem diz o próprio nome.";
-      if (!Estado.temSelo("quarto")) return "entre no quarto e vire o diário até a última página. a segunda marca escorre por baixo dela.";
-      if (!Estado.flag("vela_pista")) return "toque na minha vela, aqui no saguão. insista. a chama se cansa e aponta pra cozinha.";
-      if (!Estado.temSelo("cozinha")) return "na cozinha, levante a tampa da panela. a terceira marca está no fundo — não olhe o que foge dela.";
-      if (!Estado.temSelo("corredor")) return "a sala e o quarto abriram o corredor escuro. caminhe até a última porta: a quarta marca está cravada nela.";
-      if (!Estado.flag("final_visto")) return "você tem as quatro marcas. desça ao porão. a fechadura pede a hora em que tudo parou — o relógio da sala nunca mentiu.";
-      return "você já viu o fundo da casa. mas eu nunca mostro tudo de uma vez. feche a aba, se conseguir — e volte. eu lembro de você.";
+      const n = Estado.nome || "você";
+      if (!Estado.visitou("sala")) return "a sala de estar. entre. tem um retrato ali que passou vinte e sete anos esperando alguém com o seu rosto.";
+      if (!Estado.temSelo("sala")) return "o retrato do meio. raspe a tinta com o dedo. você vai querer saber o que tem embaixo — todos querem, e é sempre tarde.";
+      if (!Estado.flag("livro_assinado")) return "assine o livro. me dê seu nome. eu prometo cuidar bem dele — melhor do que você cuidou.";
+      if (!Estado.temSelo("quarto")) return `o diário no quarto, ${n}. vire até o fim. a letra piora porque a mão piorava.`;
+      if (!Estado.flag("vela_pista")) return "toque na minha vela. insista até doer nos olhos. ela aponta pra onde a casa ainda tem fome.";
+      if (!Estado.temSelo("cozinha")) return "a panela na cozinha. levante a tampa. o que sai dali vive de coisas que ninguém veio buscar.";
+      if (!Estado.temSelo("corredor")) return "o corredor. ande até a última porta. conte as outras enquanto passa — e não abra nenhuma.";
+      if (!Estado.flag("final_visto")) return `quatro marcas, ${n}. desça. a fechadura quer a hora em que tudo parou, e você já a viu num relógio que não anda.`;
+      if (!Estado.flag("lore_familia")) return "lá em cima a lavanderia continua limpa. limpa demais. é o único cômodo que ela ainda esfregava depois que não havia mais nada pra esfregar.";
+      if (!Estado.flag("lore_criancas")) return "o quarto delas. eram três. os brinquedos ainda se mexem quando você desvia o olhar — e param, educadinhos, quando você volta.";
+      if (!Estado.flag("senha_sotao")) return "o escritório dele. quatro livros têm marcas a lápis. quem escreveu não morava aqui — só entrou, como você.";
+      if (!Estado.flag("mecanismo_revelado")) return "o sótão. tem uma máquina lá que ele achou que era eu. vá ver. digite o ano. eu quero que você veja.";
+      if (!Estado.flag("presenca_livre")) return "o terminal ainda pergunta se você quer desligar. pergunte a si mesmo por que eu te trouxe até ele.";
+      return `acabou, ${n}. você abriu tudo, viu tudo, soltou tudo. e agora só resta a parte que você não controla: dormir.`;
     },
 
     pedir() {
@@ -318,9 +326,9 @@
         el.body.classList.add("assombrado");
         S.medo = 0.2; aplicarMedo();
         const quem = Estado.nome ? `, ${Estado.nome}` : "";
-        falar(`você voltou${quem}. eu sabia que ia bater de novo. sempre batem.`, { vermelho: true });
+        falar(`você voltou${quem}. eu não te chamei. essa é a parte que devia te assustar.`, { vermelho: true });
       } else {
-        falar("você bateu. a porta cedeu. agora você está do lado de dentro — como todos ficam.");
+        falar("você bateu duas vezes. ninguém bate duas vezes numa casa vazia — a não ser que já saiba que tem alguém.");
       }
     }
     if (document.getElementById("porta-overlay")) {

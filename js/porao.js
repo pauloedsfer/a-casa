@@ -62,10 +62,11 @@
 
     const blocos = [
       "a fechadura cede no terceiro número. a porta não abre pra fora — abre pra baixo.",
-      "não há porão. há uma escada que desce mais fundo do que a colina deveria permitir.",
-      "no fim dela, uma sala igualzinha ao saguão. a mesma vela acesa. o mesmo livro de visitas. e o seu nome já está lá — assinado com a data de hoje. e com uma data de daqui a muitos anos.",
-      "a casa aprendeu você. agora ela pode te repetir pra sempre, mesmo depois que você fechar esta aba.",
-      "— mas esta casa sempre foi a menor. a caseira. quem dava as ordens morava no alto da colina."
+      "não há porão. há uma escada que desce mais fundo do que a colina permite, e o ar que sobe dela é morno, como hálito.",
+      "no fim dela, uma sala idêntica a este saguão. a mesma vela. o mesmo livro de visitas aberto. e o seu nome já está lá — com a letra que você usou hoje.",
+      "abaixo do seu nome há uma data. não é a de hoje. é uma que ainda não chegou, e está perto o bastante pra você reconhecer o mês.",
+      "eu não te trouxe aqui pra te assustar. eu te trouxe pra te ensinar o caminho — porque um dia você vai precisar dele, e vai vir sozinho.",
+      "— e esta casa sempre foi a menor das duas. a caseira. quem dava as ordens mora no alto da colina, e ainda está esperando alguém bater."
     ];
 
     const rev = $("#revelacao");

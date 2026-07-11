@@ -31,7 +31,7 @@
   setTimeout(() => {
     Casa.medo(0.3);
     if (Estado.temSelo("sala")) Casa.falar("você já esteve aqui. a caveira do retrato ainda te encara.", { vermelho: true });
-    else Casa.falar("a sala de estar. três retratos. os olhos seguem você. o do meio foi raspado até não ter rosto.");
+    else Casa.falar("três retratos. dois te olham. o do meio foi raspado até o osso da parede — e mesmo assim é ele que está te olhando mais.");
   }, 700);
 
   // retratos com rosto → migalhas de lore (deixadas em aberto de propósito)
@@ -56,12 +56,12 @@
     Casa.medo(0.55);
     renderSelos();
     if (jaTinha) Casa.falar("a caveira continua ali, sob a tinta. ✦. o primeiro número era 3. ainda é.", { vermelho: true });
-    else Casa.falar("a tinta raspa e não há rosto embaixo — só um crânio te encarando. e um sinal aceso: ✦. o primeiro número é 3. o porão vai pedir.", { vermelho: true });
+    else Casa.falar("a tinta sai fácil. embaixo não há rosto — há um crânio, e ele está sorrindo do jeito que todo crânio sorri. ✦. o primeiro número é 3. o retrato do meio nunca teve dono: é onde a casa guarda o rosto de quem ainda vai ficar.", { vermelho: true });
   }
 
   // relógio parado
   $("#relogio").addEventListener("click", (e) => {
     e.stopPropagation(); gesto();
-    Casa.falar("o relógio parou às 3h47. foi quando aconteceu. ninguém nunca disse o quê.", { vermelho: true });
+    Casa.falar("3h47. o relógio parou aí e nunca mais andou. em algum lugar da sua vida também tem uma hora dessas — você só ainda não sabe qual.", { vermelho: true });
   });
 })();

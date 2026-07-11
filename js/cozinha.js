@@ -28,7 +28,7 @@
 
   setTimeout(() => {
     if (Estado.temSelo("cozinha")) Casa.falar("você já viu o que mora na panela. ele lembra de você.");
-    else Casa.falar("a cozinha. a panela no fogão está tampada — e não devia estar se mexendo.");
+    else Casa.falar("a panela está tampada desde 1998. e está morna. sinta o cabo antes de levantar — depois me diga se ainda quer levantar.");
   }, 700);
 
   const panela = $("#panela");
@@ -70,7 +70,7 @@
     renderSelos();
     setTimeout(() => {
       if (jaTinha) Casa.falar("no fundo, sob a gordura endurecida: ❖. o terceiro número era 7.", { vermelho: true });
-      else Casa.falar("gravado fundo na chapa, sob a crosta: ❖. o terceiro número — 7. três... quatro... sete. o relógio da sala, lembra?", { vermelho: true });
+      else Casa.falar("❖. o terceiro número — 7. três, quatro, sete: a hora em que ela parou de cozinhar. o que estava na panela naquele dia continua aqui, e continua com fome.", { vermelho: true });
     }, 950);
   }
 

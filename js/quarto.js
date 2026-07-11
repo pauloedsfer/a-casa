@@ -70,7 +70,7 @@
     Casa.medo(0.6);
     renderSelos();
     if (jaTinha) Casa.falar("a última página some toda vez. ✧. o segundo número era 4.", { vermelho: true });
-    else Casa.falar("a tinta escorreu e revelou um sinal por baixo: ✧. o segundo número — 4. o relógio da sala não vai sair da sua cabeça.", { vermelho: true });
+    else Casa.falar("a última página não termina. a mão parou no meio da palavra. ✧. o segundo número — 4. ele estava avisando você, e você continuou virando as páginas assim mesmo.", { vermelho: true });
   }
 
   // início
@@ -78,6 +78,6 @@
   setTimeout(() => {
     Casa.medo(0.38);
     if (Estado.temSelo("quarto")) Casa.falar("você já leu tudo. as páginas não melhoram na segunda vez.", { vermelho: true });
-    else Casa.falar("o quarto. na mesa, um diário aberto em 1998. vire as páginas — se tiver estômago.");
+    else Casa.falar("a cama está feita. o diário está aberto na página exata em que você chegou. vire — ele foi deixado ali pra você.");
   }, 700);
 })();
