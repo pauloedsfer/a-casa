@@ -1,0 +1,27 @@
+COLOQUE AQUI AS FOTOS DOS CÔMODOS
+
+Formato:  JPG  ·  800px de largura  ·  qualidade 70-80  ·  proporção 4:3
+Peso alvo: 60-120 KB por arquivo (JPG pesa um pouco mais que WebP; tudo bem).
+
+Nomes esperados (o jogo procura exatamente estes):
+
+  sala-0.jpg         sala-2.jpg
+  quarto-0.jpg       quarto-2.jpg
+  cozinha-0.jpg      cozinha-2.jpg
+  corredor-0.jpg     corredor-2.jpg
+  porao-0.jpg        porao-2.jpg
+  criancas-0.jpg     criancas-2.jpg
+  escritorio-0.jpg   escritorio-2.jpg
+  lavanderia-0.jpg   lavanderia-2.jpg
+  sotao-0.jpg        sotao-1.jpg     sotao-2.jpg
+  varanda-0.jpg
+
+  -0  = o cômodo antes do segredo
+  -2  = o cômodo depois do segredo (o "depois")
+  -1  = só o sótão usa (estado intermediário: terminal ligado)
+
+Se um arquivo faltar, o jogo NÃO quebra: mostra a moldura e a legenda.
+Comece por um cômodo só (ex: sala-0 e sala-2) para testar.
+
+Dica: o jogo já aplica sépia, grão e vinheta por cima via CSS —
+não precisa "envelhecer" a imagem no Gemini além do que os prompts pedem.

@@ -6,6 +6,15 @@
 
 (() => {
   "use strict";
+
+  // a fotografia do cômodo (artefato achado na casa)
+  const FOTO = Foto.montar({
+    destino: "#foto", id: "varanda",
+    legenda: "a casa vista da varanda · 1998",
+    velado: "clique para ver a casa daqui de fora",
+    revelado: () => true
+  });
+  FOTO.estagio(0);
   Estado.marcarComodo("varanda");
   Estado.flag("varanda_visitada", true);
 

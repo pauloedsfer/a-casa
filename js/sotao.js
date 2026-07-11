@@ -8,6 +8,15 @@
 
 (() => {
   "use strict";
+
+  // a fotografia do cômodo (artefato achado na casa)
+  const FOTO = Foto.montar({
+    destino: "#foto", id: "sotao",
+    legenda: "sótão · o mecanismo",
+    velado: "clique para ver o sótão onde você está",
+    revelado: () => Estado.visitou("sotao")
+  });
+  FOTO.estagio(Estado.flag("presenca_livre") ? 2 : (Estado.flag("mecanismo_revelado") ? 1 : 0));
   const $ = (s) => document.querySelector(s);
   const SENHA = "1998";
 
@@ -70,6 +79,7 @@
 
   function entrar() {
     Estado.flag("mecanismo_revelado", true);
+    FOTO.estagio(1);
     $("#area-senha").remove();
     $("#dica-senha").remove();
     crt.textContent = "";
@@ -131,6 +141,7 @@
       if (i >= seq.length) {
         document.body.classList.remove("assombrado");
         Estado.flag("presenca_livre", true);
+        FOTO.estagio(2);
         Casa.falar("o mecanismo era dele. eu não. eu nunca precisei de fios pra te seguir — e agora nem de portas.", { vermelho: true, pausaFinal: 5000 });
         return;
       }

@@ -6,6 +6,15 @@
 
 (() => {
   "use strict";
+
+  // a fotografia do cômodo (artefato achado na casa)
+  const FOTO = Foto.montar({
+    destino: "#foto", id: "sala",
+    legenda: "sala de estar · retratos da família",
+    velado: "clique para ver a sala onde você está",
+    revelado: () => Estado.visitou("sala")
+  });
+  FOTO.estagio(Estado.temSelo("sala") ? 2 : 0);
   const $ = (s) => document.querySelector(s);
 
   Estado.marcarComodo("sala");
@@ -49,6 +58,7 @@
   function revelarSelo() {
     const jaTinha = Estado.temSelo("sala");
     Estado.coletarSelo("sala");
+    FOTO.estagio(2);
     Estado.flag("codigo_1", "3");
     const r = document.getElementById("retrato-sem-rosto");
     if (r) r.classList.add("revelado");

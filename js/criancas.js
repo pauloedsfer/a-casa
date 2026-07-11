@@ -8,6 +8,15 @@
 
 (() => {
   "use strict";
+
+  // a fotografia do cômodo (artefato achado na casa)
+  const FOTO = Foto.montar({
+    destino: "#foto", id: "criancas",
+    legenda: "quarto das crianças · três camas",
+    velado: "clique para ver o quarto onde você está",
+    revelado: () => Estado.visitou("criancas")
+  });
+  FOTO.estagio(Estado.flag("lore_criancas") ? 2 : 0);
   const $ = (s) => document.querySelector(s);
 
   let revelados = 0;
@@ -92,6 +101,7 @@
 
   function revelacaoFinal() {
     Estado.flag("lore_criancas", true);
+    FOTO.estagio(2);
     const fim = document.createElement("div");
     fim.className = "sussurro";
     fim.style.borderTop = "1px solid rgba(217,138,176,.4)";

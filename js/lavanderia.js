@@ -7,6 +7,15 @@
 
 (() => {
   "use strict";
+
+  // a fotografia do cômodo (artefato achado na casa)
+  const FOTO = Foto.montar({
+    destino: "#foto", id: "lavanderia",
+    legenda: "lavanderia · sempre limpa",
+    velado: "clique para ver a lavanderia onde você está",
+    revelado: () => Estado.visitou("lavanderia")
+  });
+  FOTO.estagio(Estado.flag("lore_familia") ? 2 : 0);
   const $ = (s) => document.querySelector(s);
 
   // usa o motor só para marcar visita (o resto é bem custom aqui)
@@ -80,7 +89,8 @@
   }
 
   function revelacaoFinal() {
-    Estado.flag("lore_familia", true);   // aprofunda a história (usada pelos próximos cômodos)
+    Estado.flag("lore_familia", true);
+    FOTO.estagio(2);   // aprofunda a história (usada pelos próximos cômodos)
     setTimeout(() => {
       Casa.falar("eram três. ninguém fala deles lá embaixo. mas o quarto no andar de cima ainda os guarda.", { vermelho: true, pausaFinal: 4000 });
       const box = $("#achado");

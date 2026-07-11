@@ -6,6 +6,15 @@
 
 (() => {
   "use strict";
+
+  // a fotografia do cômodo (artefato achado na casa)
+  const FOTO = Foto.montar({
+    destino: "#foto", id: "porao",
+    legenda: "porão · o fundo da casa",
+    velado: "clique para ver o porão onde você está",
+    revelado: () => Estado.visitou("porao")
+  });
+  FOTO.estagio(Estado.flag("final_visto") ? 2 : 0);
   const $ = (s) => document.querySelector(s);
 
   Estado.marcarComodo("porao");
@@ -55,6 +64,7 @@
 
   function abrir() {
     Estado.flag("final_visto", true);
+    FOTO.estagio(2);
     Casa.audio.climax();
     document.body.classList.add("assombrado");
     setTimeout(() => document.body.classList.remove("assombrado"), 2000);

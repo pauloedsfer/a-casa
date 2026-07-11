@@ -7,6 +7,15 @@
 
 (() => {
   "use strict";
+
+  // a fotografia do cômodo (artefato achado na casa)
+  const FOTO = Foto.montar({
+    destino: "#foto", id: "corredor",
+    legenda: "corredor · a última porta",
+    velado: "clique para ver o corredor onde você está",
+    revelado: () => Estado.visitou("corredor")
+  });
+  FOTO.estagio(Estado.temSelo("corredor") ? 2 : 0);
   const $ = (s) => document.querySelector(s);
 
   Estado.marcarComodo("corredor");
@@ -64,6 +73,7 @@
 
   function revelarSelo() {
     Estado.coletarSelo("corredor");
+    FOTO.estagio(2);
     Estado.flag("porao_revelado", true);
     $("#selo").hidden = false;
     renderSelos();

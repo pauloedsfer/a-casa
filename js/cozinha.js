@@ -8,6 +8,15 @@
 
 (() => {
   "use strict";
+
+  // a fotografia do cômodo (artefato achado na casa)
+  const FOTO = Foto.montar({
+    destino: "#foto", id: "cozinha",
+    legenda: "cozinha · último jantar",
+    velado: "clique para ver a cozinha onde você está",
+    revelado: () => Estado.visitou("cozinha")
+  });
+  FOTO.estagio(Estado.temSelo("cozinha") ? 2 : 0);
   const $ = (s) => document.querySelector(s);
 
   Estado.marcarComodo("cozinha");
@@ -65,6 +74,7 @@
   function revelarSelo() {
     const jaTinha = Estado.temSelo("cozinha");
     Estado.coletarSelo("cozinha");
+    FOTO.estagio(2);
     Estado.flag("codigo_3", "7");
     $("#selo").hidden = false;
     renderSelos();

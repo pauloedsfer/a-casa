@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lava& — lavanderia inteligente</title>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../css/casa.css?v=14">
+<link rel="stylesheet" href="../css/casa.css?v=16">
 <style>
   body.lavanderia{ --bg:#eef1f4; --fg:#2b3138; --fg-dim:#7c8896; --accent:#2f9e78;
     background:#eef1f4; color:#2b3138;
@@ -36,6 +36,14 @@
   .achado .item:last-child{ border-bottom:none; }
   .achado b{ color:#8a1414; }
 
+  /* a foto aqui parece um card do site limpo — e apodrece junto */
+  body.lavanderia .foto{ background:#fff; border:1px solid #dbe1e8; border-radius:12px; box-shadow:0 2px 14px rgba(40,60,90,.10); }
+  body.lavanderia .foto img{ filter:saturate(1) brightness(1) contrast(1); }
+  body.lavanderia .foto .veu{ background:#f4f7fa; color:#7c8896; border-radius:8px; }
+  body.lavanderia .foto .legenda-foto{ color:#8a95a1; }
+  body.lavanderia.corrompida .foto{ background:#241414; border-color:#4a2020; }
+  body.lavanderia.corrompida .foto .legenda-foto{ color:#a56b6b; }
+
   /* a presença intrusa (CRT) sobre o site limpo */
   .presenca{ display:none; border:1px solid #2b8; background:#04120b; color:#33ff66; font-family:"Courier New",monospace; margin:16px 0; }
   body.lavanderia.corrompida .presenca{ display:block; }
@@ -62,6 +70,8 @@
 
     <div class="presenca"><span id="voz-texto"></span><span class="cursor">▊</span></div>
 
+    <div id="foto"></div>
+
     <p class="lav-intro" id="lav-intro">bem-vindo de volta! faz tempo que nenhum ciclo roda por aqui. escolha um aparelho pra começar.</p>
 
     <div class="aparelhos">
@@ -85,9 +95,10 @@
 
   <div id="manchas"></div>
 
-  <script src="../js/estado.js?v=14"></script>
-  <script src="../js/casa.js?v=14"></script>
-  <script src="../js/comodo.js?v=14"></script>
-  <script src="../js/lavanderia.js?v=14"></script>
+  <script src="../js/estado.js?v=16"></script>
+  <script src="../js/casa.js?v=16"></script>
+  <script src="../js/comodo.js?v=16"></script>
+  <script src="../js/foto.js?v=16"></script>
+  <script src="../js/lavanderia.js?v=16"></script>
 </body>
 </html>

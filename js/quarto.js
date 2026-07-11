@@ -7,6 +7,15 @@
 
 (() => {
   "use strict";
+
+  // a fotografia do cômodo (artefato achado na casa)
+  const FOTO = Foto.montar({
+    destino: "#foto", id: "quarto",
+    legenda: "quarto do casal · 1998",
+    velado: "clique para ver o quarto onde você está",
+    revelado: () => Estado.visitou("quarto")
+  });
+  FOTO.estagio(Estado.temSelo("quarto") ? 2 : 0);
   const $ = (s) => document.querySelector(s);
 
   Estado.marcarComodo("quarto");
@@ -65,6 +74,7 @@
   function revelarSelo() {
     const jaTinha = Estado.temSelo("quarto");
     Estado.coletarSelo("quarto");
+    FOTO.estagio(2);
     Estado.flag("codigo_2", "4");
     $("#selo").hidden = false;
     Casa.medo(0.6);

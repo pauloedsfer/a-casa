@@ -7,6 +7,15 @@
 
 (() => {
   "use strict";
+
+  // a fotografia do cômodo (artefato achado na casa)
+  const FOTO = Foto.montar({
+    destino: "#foto", id: "escritorio",
+    legenda: "escritório · a mesa dele",
+    velado: "clique para ver o escritório onde você está",
+    revelado: () => Estado.visitou("escritorio")
+  });
+  FOTO.estagio(Estado.flag("senha_sotao") ? 2 : 0);
   const $ = (s) => document.querySelector(s);
 
   Comodo.iniciar({
@@ -62,6 +71,7 @@
 
   function revelar() {
     Estado.flag("senha_sotao", true);
+    FOTO.estagio(2);
     $("#senha-final").hidden = false;
     Casa.medo(0.55);
     Casa.falar("1998. o ano em que tudo parou de andar pra frente. o sótão destrancou — e eu deixei.", { vermelho: true, pausaFinal: 4200 });
